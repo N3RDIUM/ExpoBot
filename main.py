@@ -45,6 +45,8 @@ chat.train([[
     "That's nice to hear!"
 ] for i in range(len(misc_questions))])
 
+chat.train_expo_data("./project_data.json")
+
 print("Training fallbacks...")
 chat.train_fallbacks([
     "Sorry, I didn't get that.",
