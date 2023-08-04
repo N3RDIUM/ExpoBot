@@ -126,10 +126,7 @@ class ChatBot:
             "Where can I find {}?",
             "Where can I find the {} project?",
             "Where can I find the {}?",
-            "Where can I find project {}?",
-            "Where can I find the project {}?",
-            "Where can I find the {}?",
-            "Where can I find {}?",
+            "Where can I find project {}?"
         ]
         for project in expo_data["projects"]:
             _ = [[
