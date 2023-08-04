@@ -1,0 +1,7 @@
+wheel
+playsound
+torch
+numpy
+scipy
+gtts
+omegaconf
