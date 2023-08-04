@@ -45,6 +45,18 @@ chat.train([[
     "That's nice to hear!"
 ] for i in range(len(misc_questions))])
 
+thanks = [
+    "Thank you",
+    "Thanks",
+    "Thanks a lot",
+    "Thank you very much",
+    "Thank you so much",
+]
+chat.train([[
+    thanks[i],
+    "You're welcome!",
+] for i in range(len(thanks))])
+
 chat.train_expo_data("./project_data.json")
 
 print("Training fallbacks...")
