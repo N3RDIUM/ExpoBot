@@ -140,9 +140,6 @@ class ChatBot:
         self.train(data)
         
     def numerify(self, number):
-        # if number is 1, return 1st
-        # if number is 2, return 2nd
-        # if number is 3, return 3rd
         if number == str(1):
             return "1st"
         elif number == str(2):
