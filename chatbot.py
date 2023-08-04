@@ -21,6 +21,7 @@ class ChatBot:
         self.fallbacks += fallbacks
     
     def answer(self, query):
+        if query == "": return ""
         similarities = []
         for i in range(len(self.conversation_data)):
             similarity_scores = []
