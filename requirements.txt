@@ -2,3 +2,5 @@ wheel
 playsound
 gtts
 pygobject
+pyaudio
+speechrecognition

@@ -1,8 +1,11 @@
 from speaker import Speaker
+from recognizer import Recognizer
 
 s = Speaker()
 s.initialize()
+s.speak_gtts("Hello World! This is ExpoBot.")
 
-s.speak_gtts("Hello World.")
-s.speak_gtts("I am ExpoBot.")
-s.speak_gtts("A chatbot that can help you get around the science fair!")
+r = Recognizer()
+r.initialize()
+print("Speak something!")
+print("You said:", r.recognize_from_mic())
