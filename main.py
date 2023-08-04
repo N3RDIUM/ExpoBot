@@ -5,7 +5,7 @@ from chatbot import ChatBot
 
 s = Speaker()
 s.initialize()
-print("Speaker initialized!")
+print("Speaker initialized! Running speaker test...")
 s.speak_gtts("Hello, I am ExpoBot.")
 
 r = Recognizer()
@@ -18,13 +18,14 @@ print("Training ChatBot...")
 chat.train([[ # TODO: Add more data, train based on stall positions
         "Hello",
         "Hi",
-        "Hi there!",
-        "Howdy!",
+        "Hi there",
+        "Howdy",
         "Hello",
         "Hi",
         "Hey",
-        "Nice to see you!",
-        "Long time no see!"
+        "Nice to see you",
+        "Long time no see",
+        "Hello"
     ],
     [
         "What is your name?",
