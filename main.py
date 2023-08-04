@@ -76,7 +76,9 @@ while True:
         print("You:", query)
         ans = chat.answer(query)
         print("ExpoBot:", ans)
-        s.speak_gtts(ans)
+        try:
+            s.speak_gtts(ans)
+        except AssertionError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
         print("KeyboardInterrupt")
         break
