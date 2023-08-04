@@ -1,0 +1,51 @@
+{
+    "categories": [
+        "Science",
+        "Agriculture",
+        "Climate Change"
+    ],
+    "floors": [
+        "Ground",
+        "1",
+        "2",
+        "3"
+    ],
+    "projects": [
+        {
+            "title": "Biodiversity Monitoring System",
+            "description": "Developing an advanced AI-powered system to monitor and analyze changes in biodiversity patterns across different ecosystems.",
+            "category": "Science",
+            "floor": "Ground"
+        },
+        {
+            "title": "Precision Farming Enhancement",
+            "description": "Implementing cutting-edge technology such as drones and sensors to optimize crop yield and resource utilization in agriculture.",
+            "category": "Agriculture",
+            "floor": "3"
+        },
+        {
+            "title": "Sustainable Urban Planning",
+            "description": "Creating a comprehensive urban planning strategy that focuses on reducing carbon footprint, promoting green spaces, and enhancing public transportation.",
+            "category": "Climate Change",
+            "floor": "2"
+        },
+        {
+            "title": "Space Debris Cleanup",
+            "description": "Designing a space mission to clean up hazardous debris orbiting Earth, contributing to safer space exploration.",
+            "category": "Science",
+            "floor": "1"
+        },
+        {
+            "title": "Aquaponic Farming Initiative",
+            "description": "Establishing an aquaponics farm that combines aquaculture and hydroponics, offering a sustainable approach to food production.",
+            "category": "Agriculture",
+            "floor": "Ground"
+        },
+        {
+            "title": "Renewable Energy Adoption",
+            "description": "Promoting the widespread adoption of renewable energy sources like solar and wind power to decrease reliance on fossil fuels.",
+            "category": "Climate Change",
+            "floor": "3"
+        }
+    ]
+}
