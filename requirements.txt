@@ -4,3 +4,4 @@ gtts
 pygobject
 pyaudio
 speechrecognition
+spacy
