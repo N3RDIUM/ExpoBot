@@ -36,7 +36,7 @@ class Speaker():
             speaker=self.tts.speakers[5],
             language=self.tts.languages[0], 
             file_path=filename,
-            speaker_wav="SampleVoice.wav",
+            speaker_wav="SampleVoice.mp3",
             progress_bar=True,
             gpu=True
         )
