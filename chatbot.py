@@ -7,8 +7,10 @@ import _sha256 as sha256
 import os
 import multiprocessing
 import yaml
-p = inflect.engine()        
+p = inflect.engine()
 nlp = spacy.load('en_core_web_md')
+import logging
+logging.basicConfig(level=logging.INFO)
 
 THRESHOLD = 0.6 # Similarity threshold
 def similarity(a, b):
@@ -18,6 +20,7 @@ def similarity(a, b):
 
 class ChatBot:
     def __init__(self):
+        logging.log(logging.INFO, "[CHAT] ChatBot __init__")
         self.conversation_data = []
         self.fallbacks = []
         self.cache = {}
@@ -27,10 +30,12 @@ class ChatBot:
         self.loader = yaml.SafeLoader
         
     def train(self, conversation_data):
+        logging.log(logging.INFO, f"[CHAT] Training chatbot on {len(conversation_data)} conversation data points...")
         self.conversation_data += conversation_data
         self.save_hash = sha256.sha256(str(conversation_data).encode()).hexdigest()
     
     def train_fallbacks(self, fallbacks):
+        logging.log(logging.INFO, f"[CHAT] Training chatbot on {len(fallbacks)} fallback data points...")
         self.fallbacks += fallbacks
     
     def calculate_similarity(self, query, conversation_entry):
@@ -43,8 +48,9 @@ class ChatBot:
     def answer(self, query):
         if query == "":
             return ""
-
+        logging.log(logging.INFO, f"[CHAT] Answering query: {query}")
         if not query in self.cache:
+            logging.log(logging.INFO, "[CHAT] Query not in cache. Calculating similarities...")
             # Create a pool of worker processes
             pool = multiprocessing.Pool()
 
@@ -54,15 +60,16 @@ class ChatBot:
             # Close and join the pool
             pool.close()
             pool.join()
-
+            
             similarities = similarity_results
-
+            logging.log(logging.INFO, "[CHAT] Similarities calculated. Linearizing...")
+            
             linear_similarities = []
             for i, similarity_scores in enumerate(similarities):
                 for j, score in enumerate(similarity_scores):
                     if score > THRESHOLD:
                         linear_similarities.append((score, (i, j)))
-
+            logging.log(logging.INFO, "[CHAT] Linearized. Sorting...")
             self.cache[query] = linear_similarities
         else:
             linear_similarities = self.cache[query]
@@ -70,13 +77,16 @@ class ChatBot:
         self.save_cache()
 
         try:
+            logging.log(logging.INFO, "[CHAT] Sorted matches. Finding max...")
             max_similarity = max(i[0] for i in linear_similarities)
             max_similarity_index = next(i[1] for i in linear_similarities if i[0] == max_similarity)
+            logging.log(logging.INFO, f"[CHAT] Max found to be {max_similarity} at index {max_similarity_index}")
             return self.conversation_data[max_similarity_index[0]][max_similarity_index[1] + 1]
         except:
             return self.random_fallback()
         
     def random_fallback(self):
+        logging.log(logging.INFO, "[CHAT] Random fallback!")
         return random.choice(self.fallbacks)
     
     def train_expo_data(self, expo_data):
@@ -96,6 +106,7 @@ class ChatBot:
         # let's start with the categories:
         # "What are the categories?"
         # etc.
+        logging.log(logging.INFO, "[CHAT] Training chatbot on categories...")
         qs = [
             "What are the categories?", 
             "What are the categories of projects?", 
@@ -116,6 +127,7 @@ class ChatBot:
             data.append(_[i])
             
         # Explain a topic
+        logging.log(logging.INFO, "[CHAT] Training chatbot on category explanations...")
         qs = [
             "What is the {} category?",
             "What is the {} topic?",
@@ -139,6 +151,7 @@ class ChatBot:
                 data.append(_[i])
         
         # "What are the projects in category X?"
+        logging.log(logging.INFO, "[CHAT] Training chatbot on projects in categories...")
         qs = [
             "What are the projects in category {}?",
             "What are the projects in the {} category?",
@@ -160,6 +173,7 @@ class ChatBot:
                 data.append(_[i])
                 
         # What are the projects in floor X?
+        logging.log(logging.INFO, "[CHAT] Training chatbot on projects in floors...")
         qs = [
             "What are the projects in floor {}?",
             "What are the projects in the {} floor?",
@@ -178,6 +192,7 @@ class ChatBot:
                 data.append(_[i])
                 
         # What are the projects in room X?
+        logging.log(logging.INFO, "[CHAT] Training chatbot on projects in rooms...")
         qs = [
             "What are the projects in room {}?",
             "What are the projects in the {} room?",
@@ -198,6 +213,7 @@ class ChatBot:
             except IndexError: pass
         
         # Where is project X?
+        logging.log(logging.INFO, "[CHAT] Training chatbot on project locations...")
         qs = [
             "Where is project {}?",
             "Where is the {} project?",
@@ -251,6 +267,7 @@ class ChatBot:
         return fuzz.ratio(a, b)
     
     def load_cache(self):
+        logging.log(logging.INFO, "[CHAT] Loading cache...")
         try:
             with open("cache.json", "r") as f:
                 self.cache = json.load(f)
@@ -264,6 +281,7 @@ class ChatBot:
             self.save_cache()
     
     def save_cache(self):
+        logging.log(logging.INFO, "[CHAT] Saving cache...")
         try:
             with open("cache.json", "w") as f:
                 json.dump(self.cache, f)
@@ -273,9 +291,11 @@ class ChatBot:
     def train_from_yaml(self, yaml_file):
         with open(yaml_file, "r") as f:
             data = yaml.load(f, Loader=self.loader)["conversations"]
+        logging.log(logging.INFO, "Training chatbot on yaml file: {}".format(yaml_file))
         self.train(data)
     
     def train_from_corpus(self, corpus_dir):
+        logging.log(logging.INFO, "[CHAT] Training chatbot on corpus directory: {}".format(corpus_dir))
         for filename in os.listdir(corpus_dir):
             if filename.endswith(".yml"):
                 self.train_from_yaml(os.path.join(corpus_dir, filename))

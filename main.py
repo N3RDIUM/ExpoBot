@@ -1,21 +1,27 @@
-print("Initializing...")
+import logging
+logging.basicConfig(level=logging.INFO)
+
+logging.log(logging.INFO, "[MAIN] Importing modules...")
 from speaker import Speaker
 from recognizer import Recognizer
 from chatbot import ChatBot
 
+logging.log(logging.INFO, "[MAIN] Initializing modules...")
 s = Speaker()
 s.initialize()
-print("Speaker initialized! Running speaker test...")
+
+logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")
 s.speak_gtts("Hello. Welcome to the CIS science fair!")
 s.speak_offline("Testing offline speech synthesis.")
+logging.log(logging.INFO, "[MAIN] Speaker test complete!")
 
+logging.log(logging.INFO, "[MAIN] Initializing speech recognition...")
 r = Recognizer()
 r.initialize()
-print("Recognizer initialized!")
 
+logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
 chat = ChatBot()
 
-print("Training ChatBot...")
 chat.train([[
         "Hello",
         "Hi there",
@@ -55,12 +61,13 @@ chat.train([[
     "You're welcome!",
 ] for i in range(len(thanks))])
 
+logging.log(logging.INFO, "[MAIN] Training chatbot on exposition data...")
 chat.train_expo_data("./project_data.json")
 
-print("Training Corpus...")
+logging.log(logging.INFO, "[MAIN] Training chatbot on chatterbot corpus...")
 chat.train_from_corpus("chatterbot-corpus-data/")
 
-print("Training fallbacks...")
+logging.log(logging.INFO, "[MAIN] Training chatbot on fallbacks...")
 chat.train_fallbacks([
     "Sorry, I didn't get that.",
     "Can you say that again?",
@@ -69,20 +76,21 @@ chat.train_fallbacks([
     "Sorry, I didn't get that.",
 ])
 
-print("Loading conversation cache...")
+logging.log(logging.INFO, "[MAIN] Training complete! Loading previous cache...")
 chat.load_cache()
 
-print(f"Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
+logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:
     try:
-        print("Listening!")
         query = r.recognize_from_mic()
-        print("You:", query)
+        logging.log(logging.INFO, f"[MAIN] Recognized: {query}")
         ans = chat.answer(query)
-        print("ExpoBot:", ans)
+        logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: {ans}")
         try:
+            logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
             s.speak_offline(ans)
         except ValueError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
-        print("KeyboardInterrupt")
+        logging.log(logging.INFO, "[MAIN] KeyboardInterrupt detected. Saving cache and exiting...")
+        chat.save_cache()
         break
