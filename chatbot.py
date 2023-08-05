@@ -3,6 +3,7 @@ import random
 import json
 import inflect
 import fuzzywuzzy.fuzz as fuzz
+import _sha256 as sha256
 p = inflect.engine()        
 nlp = spacy.load('en_core_web_md')
 
@@ -17,10 +18,10 @@ class ChatBot:
         self.conversation_data = []
         self.fallbacks = []
         self.cache = {}
-        self.load_cache()
         
     def train(self, conversation_data):
         self.conversation_data += conversation_data
+        self.save_hash = sha256.sha256(str(conversation_data).encode()).hexdigest()
     
     def train_fallbacks(self, fallbacks):
         self.fallbacks += fallbacks
@@ -232,6 +233,11 @@ class ChatBot:
         try:
             with open("cache.json", "r") as f:
                 self.cache = json.load(f)
+                if self.cache["train_data_hash"] != self.save_hash:
+                    self.cache = {
+                        "train_data_hash": self.save_hash,
+                    }
+                    self.save_cache()
         except FileNotFoundError:
             self.cache = {}
             self.save_cache()
@@ -239,6 +245,6 @@ class ChatBot:
     def save_cache(self):
         try:
             with open("cache.json", "w") as f:
-                json.dump(self.cache, f)
+                json.dump(self.cache, f, indent=4)
         except FileNotFoundError:
             self.cache = {}

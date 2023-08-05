@@ -65,6 +65,9 @@ chat.train_fallbacks([
     "Sorry, I didn't get that.",
 ])
 
+print("Loading conversation cache...")
+chat.load_cache()
+
 print("Done! Starting up...")
 while True:
     try:

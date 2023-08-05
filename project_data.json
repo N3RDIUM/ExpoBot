@@ -1,8 +1,17 @@
 {
     "categories": [
-        {"title":"Science", "description": "Work in Progress..."},
-        {"title":"Agriculture", "description": "Work in Progress..."},
-        {"title":"Climate Change", "description": "Work in Progress..."}
+        {
+            "title":"Science", 
+            "description": "Science is the systematic study of the structure and behavior of the physical and natural world through observation and experiment."
+        },
+        {
+            "title":"Agriculture", 
+            "description": "Agriculture is the science and art of cultivating plants and livestock."
+        },
+        {
+            "title":"Climate Change", 
+            "description": "Climate change is a change in the usual weather found in a place."
+        }
     ],
     "floors": ["1", "2", "3"],
     "rooms": ["1", "2", "3", "4", "5", "6", "7"],
