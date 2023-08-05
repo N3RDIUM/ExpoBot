@@ -33,7 +33,7 @@ class Speaker():
         filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
         self.tts.tts_to_file(
             text=text, 
-            speaker=self.tts.speakers[5],
+            speaker=self.tts.speakers[4],
             language=self.tts.languages[0], 
             file_path=filename,
             speaker_wav="SampleVoice.mp3",
