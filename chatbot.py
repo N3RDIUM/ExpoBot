@@ -16,6 +16,8 @@ class ChatBot:
     def __init__(self):
         self.conversation_data = []
         self.fallbacks = []
+        self.cache = {}
+        self.load_cache()
         
     def train(self, conversation_data):
         self.conversation_data += conversation_data
@@ -25,20 +27,25 @@ class ChatBot:
     
     def answer(self, query):
         if query == "": return ""
-        similarities = []
-        for i in range(len(self.conversation_data)):
-            similarity_scores = []
-            for j in range(len(self.conversation_data[i])):
-                similarity_scores.append(
-                    similarity(query, self.conversation_data[i][j]) +\
-                    self.fuzz_ratio(query, self.conversation_data[i][j])
-                )
-            similarities.append(similarity_scores)
-            
-        linear_similarities = []
-        for i in range(len(similarities)):
-            for j in range(len(similarities[i])):
-                linear_similarities.append((similarities[i][j], (i, j))) if similarities[i][j] > THRESHOLD else None
+        if not query in self.cache:
+            similarities = []
+            for i in range(len(self.conversation_data)):
+                similarity_scores = []
+                for j in range(len(self.conversation_data[i])):
+                    similarity_scores.append(
+                        similarity(query, self.conversation_data[i][j]) +\
+                        self.fuzz_ratio(query, self.conversation_data[i][j])
+                    )
+                similarities.append(similarity_scores)
+                
+            linear_similarities = []
+            for i in range(len(similarities)):
+                for j in range(len(similarities[i])):
+                    linear_similarities.append((similarities[i][j], (i, j))) if similarities[i][j] > THRESHOLD else None
+            self.cache[query] = linear_similarities
+        else:
+            linear_similarities = self.cache[query]
+        self.save_cache()
         try:
             max_similarity = max([i[0] for i in linear_similarities])
             max_similarity_index = [i[1] for i in linear_similarities if i[0] == max_similarity][0]
@@ -220,3 +227,18 @@ class ChatBot:
     
     def fuzz_ratio(self, a, b):
         return fuzz.ratio(a, b)
+    
+    def load_cache(self):
+        try:
+            with open("cache.json", "r") as f:
+                self.cache = json.load(f)
+        except FileNotFoundError:
+            self.cache = {}
+            self.save_cache()
+    
+    def save_cache(self):
+        try:
+            with open("cache.json", "w") as f:
+                json.dump(self.cache, f)
+        except FileNotFoundError:
+            self.cache = {}
