@@ -141,6 +141,10 @@ class ChatBot:
             "Explain the {} topic.",
             "Explain the {}.",
             "Explain {}.",
+            "Tell me about the {} category.",
+            "Tell me about the {} topic.",
+            "Tell me about the {}.",
+            "Tell me about {}.",
         ]
         for category in categories:
             _ = [[

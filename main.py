@@ -65,7 +65,7 @@ logging.log(logging.INFO, "[MAIN] Training chatbot on exposition data...")
 chat.train_expo_data("./project_data.json")
 
 logging.log(logging.INFO, "[MAIN] Training chatbot on chatterbot corpus...")
-chat.train_from_corpus("chatterbot-corpus-data/")
+# chat.train_from_corpus("chatterbot-corpus-data/")
 
 logging.log(logging.INFO, "[MAIN] Training chatbot on fallbacks...")
 chat.train_fallbacks([
