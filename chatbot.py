@@ -6,6 +6,7 @@ import fuzzywuzzy.fuzz as fuzz
 import _sha256 as sha256
 import os
 import multiprocessing
+import yaml
 p = inflect.engine()        
 nlp = spacy.load('en_core_web_md')
 
@@ -23,6 +24,7 @@ class ChatBot:
         if not os.path.exists("./cache.json"):
             with open("./cache.json", "w") as f:
                 f.write("{}")
+        self.loader = yaml.SafeLoader
         
     def train(self, conversation_data):
         self.conversation_data += conversation_data
@@ -191,7 +193,6 @@ class ChatBot:
                     qs[i].format(room), 
                     "The projects in room {} are: ".format(self.number_to_speech(room)) + ", ".join(rooms[room.lower().strip()][:-1]) + " and " + rooms[room.lower().strip()][-1] + ".",
                 ] for i in range(len(qs))]
-                print(_)
                 for i in range(len(_)):
                     data.append(_[i])
             except IndexError: pass
@@ -268,3 +269,13 @@ class ChatBot:
                 json.dump(self.cache, f, indent=4)
         except FileNotFoundError:
             self.cache = {}
+            
+    def train_from_yaml(self, yaml_file):
+        with open(yaml_file, "r") as f:
+            data = yaml.load(f, Loader=self.loader)["conversations"]
+        self.train(data)
+    
+    def train_from_corpus(self, corpus_dir):
+        for filename in os.listdir(corpus_dir):
+            if filename.endswith(".yml"):
+                self.train_from_yaml(os.path.join(corpus_dir, filename))

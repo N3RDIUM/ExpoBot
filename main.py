@@ -6,7 +6,7 @@ from chatbot import ChatBot
 s = Speaker()
 s.initialize()
 print("Speaker initialized! Running speaker test...")
-s.speak("Hello. I am the see eye ess- science fair robot.")
+s.speak("Hello. Welcome to the see eye ess- science fair!")
 
 r = Recognizer()
 r.initialize()
@@ -56,6 +56,9 @@ chat.train([[
 
 chat.train_expo_data("./project_data.json")
 
+print("Training Corpus...")
+chat.train_from_corpus("chatterbot-corpus-data/")
+
 print("Training fallbacks...")
 chat.train_fallbacks([
     "Sorry, I didn't get that.",
@@ -68,7 +71,7 @@ chat.train_fallbacks([
 print("Loading conversation cache...")
 chat.load_cache()
 
-print("Done! Starting up...")
+print(f"Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:
     try:
         print("Listening!")
