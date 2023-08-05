@@ -20,7 +20,7 @@ class Recognizer():
                 self.r.adjust_for_ambient_noise(source)
                 audio = self.r.listen(source)
             try:
-                return self.r.recognize_google(audio)
+                return self.r.recognize_google(audio, language="en-IN")
             except sr.UnknownValueError:
                 return ""
         else:

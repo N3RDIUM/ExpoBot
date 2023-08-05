@@ -6,7 +6,8 @@ from chatbot import ChatBot
 s = Speaker()
 s.initialize()
 print("Speaker initialized! Running speaker test...")
-s.speak("Hello. Welcome to the see eye ess- science fair!")
+s.speak_gtts("Hello. Welcome to the CIS science fair!")
+s.speak_offline("Testing offline speech synthesis.")
 
 r = Recognizer()
 r.initialize()
@@ -15,7 +16,7 @@ print("Recognizer initialized!")
 chat = ChatBot()
 
 print("Training ChatBot...")
-chat.train([[ # TODO: Add more data, train based on stall positions
+chat.train([[
         "Hello",
         "Hi there",
         "Howdy",
@@ -80,7 +81,7 @@ while True:
         ans = chat.answer(query)
         print("ExpoBot:", ans)
         try:
-            s.speak(ans)
+            s.speak_offline(ans)
         except ValueError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
         print("KeyboardInterrupt")

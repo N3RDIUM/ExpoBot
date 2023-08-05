@@ -266,7 +266,7 @@ class ChatBot:
     def save_cache(self):
         try:
             with open("cache.json", "w") as f:
-                json.dump(self.cache, f, indent=4)
+                json.dump(self.cache, f)
         except FileNotFoundError:
             self.cache = {}
             
