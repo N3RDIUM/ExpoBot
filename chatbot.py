@@ -162,6 +162,10 @@ class ChatBot:
             "What are the projects in the {} topic?",
             "What are the projects in the {} topics?",
             "What are the projects in {}",
+            "What is in the {} category?",
+            "What is in the {} topic?",
+            "What is in the {} topics?",
+            "What is in {}",
         ]
         projects = {}
         for category in categories:
