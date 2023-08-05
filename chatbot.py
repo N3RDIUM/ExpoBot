@@ -5,6 +5,7 @@ import inflect
 import fuzzywuzzy.fuzz as fuzz
 import _sha256 as sha256
 import os
+import multiprocessing
 p = inflect.engine()        
 nlp = spacy.load('en_core_web_md')
 
@@ -30,31 +31,46 @@ class ChatBot:
     def train_fallbacks(self, fallbacks):
         self.fallbacks += fallbacks
     
+    def calculate_similarity(self, query, conversation_entry):
+        similarity_scores = []
+        for utterance in conversation_entry:
+            similarity_score = similarity(query, utterance) + self.fuzz_ratio(query, utterance)
+            similarity_scores.append(similarity_score)
+        return similarity_scores
+
     def answer(self, query):
-        if query == "": return ""
+        if query == "":
+            return ""
+
         if not query in self.cache:
-            similarities = []
-            for i in range(len(self.conversation_data)):
-                similarity_scores = []
-                for j in range(len(self.conversation_data[i])):
-                    similarity_scores.append(
-                        similarity(query, self.conversation_data[i][j]) +\
-                        self.fuzz_ratio(query, self.conversation_data[i][j])
-                    )
-                similarities.append(similarity_scores)
-                
+            # Create a pool of worker processes
+            pool = multiprocessing.Pool()
+
+            # Use the pool to calculate similarities in parallel
+            similarity_results = pool.starmap(self.calculate_similarity, [(query, entry) for entry in self.conversation_data])
+
+            # Close and join the pool
+            pool.close()
+            pool.join()
+
+            similarities = similarity_results
+
             linear_similarities = []
-            for i in range(len(similarities)):
-                for j in range(len(similarities[i])):
-                    linear_similarities.append((similarities[i][j], (i, j))) if similarities[i][j] > THRESHOLD else None
+            for i, similarity_scores in enumerate(similarities):
+                for j, score in enumerate(similarity_scores):
+                    if score > THRESHOLD:
+                        linear_similarities.append((score, (i, j)))
+
             self.cache[query] = linear_similarities
         else:
             linear_similarities = self.cache[query]
+
         self.save_cache()
+
         try:
-            max_similarity = max([i[0] for i in linear_similarities])
-            max_similarity_index = [i[1] for i in linear_similarities if i[0] == max_similarity][0]
-            return self.conversation_data[max_similarity_index[0]][max_similarity_index[1]+1]
+            max_similarity = max(i[0] for i in linear_similarities)
+            max_similarity_index = next(i[1] for i in linear_similarities if i[0] == max_similarity)
+            return self.conversation_data[max_similarity_index[0]][max_similarity_index[1] + 1]
         except:
             return self.random_fallback()
         
