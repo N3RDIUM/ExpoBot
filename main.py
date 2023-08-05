@@ -1,23 +1,26 @@
 import logging
 logging.basicConfig(level=logging.INFO)
+DEV = False
 
 logging.log(logging.INFO, "[MAIN] Importing modules...")
-from speaker import Speaker
-from recognizer import Recognizer
+if not DEV:
+    from speaker import Speaker
+    from recognizer import Recognizer
 from chatbot import ChatBot
 
 logging.log(logging.INFO, "[MAIN] Initializing modules...")
-s = Speaker()
-s.initialize()
+if not DEV:
+    s = Speaker()
+    s.initialize()
 
-logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")
-s.speak_gtts("Hello. Welcome to the CIS science fair!")
-s.speak_offline("Testing offline speech synthesis.")
-logging.log(logging.INFO, "[MAIN] Speaker test complete!")
+    logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")
+    s.speak_gtts("Hello. Welcome to the CIS science fair!")
+    s.speak_offline("Testing offline speech synthesis.")
+    logging.log(logging.INFO, "[MAIN] Speaker test complete!")
 
-logging.log(logging.INFO, "[MAIN] Initializing speech recognition...")
-r = Recognizer()
-r.initialize()
+    logging.log(logging.INFO, "[MAIN] Initializing speech recognition...")
+    r = Recognizer()
+    r.initialize()
 
 logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
 chat = ChatBot()
@@ -82,14 +85,18 @@ chat.load_cache()
 logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:
     try:
-        query = r.recognize_from_mic()
+        if not DEV:
+            query = r.recognize_from_mic()
+        else:
+            query = input("Enter query: ")
         logging.log(logging.INFO, f"[MAIN] Recognized: {query}")
         ans = chat.answer(query)
-        logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: {ans}")
-        try:
-            logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-            s.speak_offline(ans)
-        except ValueError: pass # chatbot answered with nothing
+        logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: \n\t{ans}")
+        if not DEV:
+            try:
+                logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
+                s.speak_offline(ans)
+            except ValueError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
         logging.log(logging.INFO, "[MAIN] KeyboardInterrupt detected. Saving cache and exiting...")
         chat.save_cache()
