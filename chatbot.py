@@ -41,7 +41,7 @@ class ChatBot:
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
         for utterance in conversation_entry:
-            similarity_score = similarity(query, utterance) + self.fuzz_ratio(query, utterance)
+            similarity_score = similarity(query, utterance) + self.fuzz_ratio(query, utterance) / 100
             similarity_scores.append(similarity_score)
         return similarity_scores
 
