@@ -4,6 +4,7 @@ import json
 import inflect
 import fuzzywuzzy.fuzz as fuzz
 import _sha256 as sha256
+import os
 p = inflect.engine()        
 nlp = spacy.load('en_core_web_md')
 
@@ -18,6 +19,9 @@ class ChatBot:
         self.conversation_data = []
         self.fallbacks = []
         self.cache = {}
+        if not os.path.exists("./cache.json"):
+            with open("./cache.json", "w") as f:
+                f.write("{}")
         
     def train(self, conversation_data):
         self.conversation_data += conversation_data
