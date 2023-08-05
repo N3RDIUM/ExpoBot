@@ -1,7 +1,12 @@
 wheel
-playsound
-gtts
-pygobject
 pyaudio
 speechrecognition
 spacy
+tts
+playsound
+pygobject
+mecab-python3
+unidic-lite
+inflect
+fuzzywuzzy
+python-levenshtein

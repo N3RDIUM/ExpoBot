@@ -2,13 +2,14 @@
 import os
 import shutil
 import playsound
-from gtts import gTTS
+from TTS.api import TTS
+import playsound
 
 class Speaker():
     def __init__(self):
         self.initialized = False
         self.speaking = False
-
+        
     def initialize(self):
         self.SAVE_PATH = "speech_tts/"
 
@@ -25,11 +26,20 @@ class Speaker():
                 pass
         
         # get the pytorch model
-        self.initialized = True
-        self.SPOKEN = 0
+        self.spoken = 0
+        self.tts = TTS(TTS.list_models()[0])
 
-    def speak_gtts(self, text):
-        speech = gTTS(text)
-        speech.save(self.SAVE_PATH+"_.mp3")
-        playsound.playsound(self.SAVE_PATH+"_.mp3")
-        os.remove(self.SAVE_PATH+"_.mp3")
+    def speak(self, text):
+        filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
+        self.tts.tts_to_file(
+            text=text, 
+            speaker=self.tts.speakers[5],
+            language=self.tts.languages[0], 
+            file_path=filename,
+            speaker_wav="SampleVoice.mp3",
+            progress_bar=True,
+            gpu=True
+        )
+        playsound.playsound(filename)
+        os.remove(filename)
+        self.spoken += 1

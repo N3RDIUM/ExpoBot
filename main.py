@@ -6,7 +6,7 @@ from chatbot import ChatBot
 s = Speaker()
 s.initialize()
 print("Speaker initialized! Running speaker test...")
-s.speak_gtts("Hello, I am ExpoBot.")
+s.speak("Hello. I am the see eye ess- science fair robot.")
 
 r = Recognizer()
 r.initialize()
@@ -17,11 +17,8 @@ chat = ChatBot()
 print("Training ChatBot...")
 chat.train([[ # TODO: Add more data, train based on stall positions
         "Hello",
-        "Hi",
         "Hi there",
         "Howdy",
-        "Hello",
-        "Hi",
         "Hey",
         "Nice to see you",
         "Long time no see",
@@ -77,8 +74,8 @@ while True:
         ans = chat.answer(query)
         print("ExpoBot:", ans)
         try:
-            s.speak_gtts(ans)
-        except AssertionError: pass # chatbot answered with nothing
+            s.speak(ans)
+        except ValueError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
         print("KeyboardInterrupt")
         break
