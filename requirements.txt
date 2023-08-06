@@ -10,3 +10,6 @@ unidic-lite
 inflect
 fuzzywuzzy
 python-levenshtein
+
+opencv-python
+face-recognition
