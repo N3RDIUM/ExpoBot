@@ -1,1 +1,0 @@
-./ChatBot/run.sh
