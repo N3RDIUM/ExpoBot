@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 faces
+speech_tts
+cache.json

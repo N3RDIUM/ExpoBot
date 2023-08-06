@@ -279,13 +279,19 @@ class ChatBot:
         try:
             with open("cache.json", "r") as f:
                 self.cache = json.load(f)
-                if self.cache["train_data_hash"] != self.save_hash:
+                try:
+                    if self.cache["train_data_hash"] != self.save_hash:
+                        self.cache = {
+                            "train_data_hash": self.save_hash,
+                        }
+                        self.save_cache()
+                except KeyError:
                     self.cache = {
                         "train_data_hash": self.save_hash,
                     }
                     self.save_cache()
         except FileNotFoundError:
-            self.cache = {}
+            self.cache["train_data_hash"] = ""
             self.save_cache()
     
     def save_cache(self):
@@ -304,8 +310,12 @@ class ChatBot:
         logging.log(logging.INFO, "Training chatbot on yaml file: {}".format(yaml_file))
         self.train(data)
     
-    def train_from_corpus(self, corpus_dir):
+    def train_from_corpus(self, corpus_dir, include=["*"]):
         logging.log(logging.INFO, "[CHAT] Training chatbot on corpus directory: {}".format(corpus_dir))
         for filename in os.listdir(corpus_dir):
-            if filename.endswith(".yml"):
-                self.train_from_yaml(os.path.join(corpus_dir, filename))
+            if include[0] == "*":
+                if filename.endswith(".yml"):
+                    self.train_from_yaml(os.path.join(corpus_dir, filename))
+            else:
+                if filename.split(".")[0] in include:
+                    self.train_from_yaml(os.path.join(corpus_dir, filename))

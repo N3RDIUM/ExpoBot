@@ -2,6 +2,10 @@ import logging
 logging.basicConfig(level=logging.INFO)
 DEV = False
 
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 logging.log(logging.INFO, "[MAIN] Importing modules...")
 if not DEV:
     from speaker import Speaker
@@ -65,10 +69,16 @@ chat.train([[
 ] for i in range(len(thanks))])
 
 logging.log(logging.INFO, "[MAIN] Training chatbot on exposition data...")
-chat.train_expo_data("./project_data.json")
+chat.train_expo_data(os.path.join(os.path.dirname(os.path.abspath(__file__)), "expo_data.json"))
 
 logging.log(logging.INFO, "[MAIN] Training chatbot on chatterbot corpus...")
-chat.train_from_corpus("chatterbot-corpus-data/")
+chat.train_from_corpus(os.path.join(os.path.dirname(os.path.abspath(__file__)), "chatterbot-corpus-data/"), include=[
+    "ai",
+    "botprofile",
+    "computers",
+    "conversations",
+    "science",
+])
 
 logging.log(logging.INFO, "[MAIN] Training chatbot on fallbacks...")
 chat.train_fallbacks([
