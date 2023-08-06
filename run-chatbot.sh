@@ -1,1 +1,1 @@
-./ChatBot/run.sh
+./Chatbot/run.sh

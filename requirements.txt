@@ -3,6 +3,7 @@ pyaudio
 speechrecognition
 spacy
 tts
+gtts
 playsound
 pygobject
 mecab-python3
