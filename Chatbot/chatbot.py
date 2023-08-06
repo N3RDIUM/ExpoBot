@@ -292,6 +292,8 @@ class ChatBot:
         logging.log(logging.INFO, "[CHAT] Saving cache...")
         try:
             with open("cache.json", "w") as f:
+                if not "train_data_hash" in self.cache:
+                    self.cache["train_data_hash"] = self.save_hash
                 json.dump(self.cache, f)
         except FileNotFoundError:
             self.cache = {}
