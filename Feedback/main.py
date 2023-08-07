@@ -19,7 +19,8 @@ analyzer = SentimentIntensityAnalyzer()
 def askForFeedback(name):
     speaker.speak_offline("Hello, Please give your valuable feedback")
     got_feedback = False
-    while not got_feedback:
+    try_count = 0
+    while not got_feedback and try_count < 3:
         feedback = recognizer.recognize_from_mic()
         elaboration = ""
         # Get the sentiment of the feedback using NLTK
@@ -32,8 +33,7 @@ def askForFeedback(name):
         emotion = sentiment[0][0]
         # Get the score of the most likely emotion
         score = sentiment[0][1]
-        # If the score is greater than 0.5, then the emotion is probably correct
-        if score > 0.5:
+        if score > 0.2:
             if emotion == "pos":
                 speaker.speak_offline("Thank you for your feedback. It encourages us to do better.")
                 got_feedback = True
@@ -44,7 +44,7 @@ def askForFeedback(name):
                 sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
                 emotion = sentiment[0][0]
                 score = sentiment[0][1]
-                if score > 0.5:
+                if score > 0.2:
                     if emotion == "pos":
                         speaker.speak_offline("Please tell us more about your experience.")
                         elaboration += recognizer.recognize_from_mic()
@@ -60,6 +60,7 @@ def askForFeedback(name):
                 speaker.speak_offline("Thank you for your feedback.")
         else:
             speaker.speak_offline("Sorry, I didn't get that. Please repeat your feedback.")
+            try_count += 1
     saveFeedback(feedback + " | " + elaboration, name)
     requests.get("http://localhost:5000/feedback-given/" + name)
 
