@@ -23,7 +23,7 @@ for file in os.listdir("faces"):
     if file.endswith(".jpg"):
         try:
             faces[file[:-4]] = fr.face_encodings(fr.load_image_file("faces/" + file))[0]
-            face_data[file[:-4]] = {"seen":[0]}
+            face_data[file[:-4]] = {"seen":[0], "feedback": False}
             print("Loaded face: " + file)
         except:
             print("Error loading face: " + file)
@@ -38,6 +38,7 @@ def start_server():
     def feedback_given(name):
         if name in face_data:
             face_data[name]["seen"] = []
+            face_data[name]["feedback"] = True
             return flask.jsonify({"success": True})
         else:
             return flask.jsonify({"success": False})
@@ -87,13 +88,14 @@ while True:
                     cv2.circle(frame, (int(avg_x)*downscale_factor, int(avg_y)*downscale_factor), 1, (0, 255, 0), 3)
                 # Update last seen
                 if name in face_data:
-                    # If it's been more than 2 minutes since the last time we saw this face, update
-                    if face_data[name]["seen"][-1] < time.time() - 20:
-                        if face_data[name]["seen"][-1] == 0:
-                            face_data[name]["seen"] = []
-                        face_data[name]["seen"].append(time.time())
-                    else:
-                        face_data[name]["seen"][-1] = time.time()
+                    if not face_data[name]["feedback"]:
+                        # If it's been more than 2 minutes since the last time we saw this face, update
+                        if face_data[name]["seen"][-1] < time.time() - 20:
+                            if face_data[name]["seen"][-1] == 0:
+                                face_data[name]["seen"] = []
+                            face_data[name]["seen"].append(time.time())
+                        else:
+                            face_data[name]["seen"][-1] = time.time()
         print(face_data)                
         # Show the frame
         cv2.imshow("Video", frame)

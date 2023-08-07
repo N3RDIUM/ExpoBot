@@ -61,7 +61,7 @@ def askForFeedback(name):
         else:
             speaker.speak_offline("Sorry, I didn't get that. Please repeat your feedback.")
     saveFeedback(feedback + " | " + elaboration, name)
-    requests.get("http://localhost:5000/feedback/" + name)
+    requests.get("http://localhost:5000/feedback-given/" + name)
 
 def saveFeedback(feedback, name):
     csvpath = os.path.join(os.path.dirname(__file__), "feedbacks.csv")
