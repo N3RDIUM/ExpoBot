@@ -4,7 +4,8 @@ from OpenGL.GLUT import *
 import glfw
 from text import text, display_debug
 import noise
-import random
+import math
+import numpy as np
 
 from server import Server
 from player import Player
@@ -61,12 +62,29 @@ def sphere(pos, radius, color):
     glColor3f(*color)
     glutSolidSphere(radius, 100, 100)
     glPopMatrix()
+    
+def point(pos, size, color):
+    glPushMatrix()
+    glTranslatef(*pos)
+    glColor3f(*color)
+    glPointSize(size)
+    glBegin(GL_POINTS)
+    glVertex3f(0, 0, 0)
+    glEnd()
+    glPopMatrix()
+    
+def getsample(samples, i, j):
+    try:
+        return samples[i*len(samples)//len(dots)][j*len(samples)//len(dots[i])]
+    except:
+        return 0
 
 player = Player()
 amplitude_samples = []
+amplitude_samples_large = []
 _amplitude_samples = []
 smooth_amplitude = 0
-dots = []
+dots = np.zeros((100, 50, 1))
 frames_listening = 0
 
 # Main loop
@@ -100,6 +118,11 @@ while not glfw.window_should_close(window):
                 _amplitude_samples.pop(0)
             smooth_amplitude = sum(_amplitude_samples) / len(_amplitude_samples)
             amplitude_samples.append(smooth_amplitude)
+            
+            amplitude_samples_large.append(server.data["amplitude"])
+            if len(amplitude_samples_large) > 512:
+                amplitude_samples_large.pop(0)
+
             text((10, 10), "Connected to client")
             display_debug((10, 20), [
                 "Amplitude: " + str(server.data["amplitude"]),
@@ -121,9 +144,9 @@ while not glfw.window_should_close(window):
     # Draw the 3D scene
     _setup_3d()
     glClearColor(
-        0.1 + noise.pnoise1(_frame / 800 + 64) / 4 + frames_listening / 60,
-        0.1 + noise.pnoise1(_frame / 800 + 32) / 4 + frames_listening / 60,
-        0.1 + noise.pnoise1(_frame / 800 + 16) / 4 + frames_listening / 60,
+        0.1 + noise.pnoise1(_frame / 800 + 64) / 8 + frames_listening / 60,
+        0.1 + noise.pnoise1(_frame / 800 + 32) / 8 + frames_listening / 60,
+        0.1 + noise.pnoise1(_frame / 800 + 16) / 8 + frames_listening / 60,
         1
     )
     # player.update(window)
@@ -164,7 +187,21 @@ while not glfw.window_should_close(window):
             186/255 + noise.pnoise1(_frame / 100 + 800) / 4,
         ))
     
-            
+    # Draw dots as spheres in the bg, the third index is the radius
+    for i in range(len(dots)):
+        for j in range(len(dots[i])):
+            # Update dot sizes according to amplitude and noise
+            dots[i][j][0] = (getsample(amplitude_samples_large, i, j) * 8 + abs(noise.pnoise1((_frame - i*j)/100)) * 20) + 0.24
+            # Update dot colors according to noise
+            color = (
+                min(1 - (noise.pnoise1((_frame - i*j) / 100-100) + frames_listening / 60), 1),
+                min(1 - (noise.pnoise1((_frame - i*j) / 100-200) + frames_listening / 60), 1),
+                min(1 - (noise.pnoise1((_frame - i*j) / 100-300) + frames_listening / 60), 1),
+            )
+            # Draw the dot
+            x = i * 2 - len(dots) + 1
+            y = j * 2 - len(dots[i]) + 1
+            point((x, y, -100), dots[i][j][0], color=color)
     # Keep running
     glfw.poll_events()
     glfw.swap_buffers(window)
