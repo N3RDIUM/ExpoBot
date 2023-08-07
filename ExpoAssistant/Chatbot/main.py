@@ -107,11 +107,7 @@ logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_dat
 while True:
     try:
         if not DEV:
-            if comms:
-                comms.update({"listening": 1})
             query = r.recognize_from_mic()
-            if comms:
-                comms.update({"listening": 0})
         else:
             query = input("Enter query: ")
         if comms:
@@ -127,9 +123,7 @@ while True:
                 s.speak_offline(ans)
                 if comms:
                     comms.update({"speaking": "no-one", "speaking-text": ""})
-            except ValueError: # chatbot answered with nothing
-                if comms:
-                    comms.update({"speaking": "no-one", "speaking-text": ""})
+            except ValueError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
         logging.log(logging.INFO, "[MAIN] KeyboardInterrupt detected. Saving cache and exiting...")
         chat.save_cache()

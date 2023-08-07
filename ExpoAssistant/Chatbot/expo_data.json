@@ -1,0 +1,62 @@
+{
+    "categories": [
+        {
+            "title":"Science", 
+            "description": "Science is the systematic study of the structure and behavior of the physical and natural world through observation and experiment."
+        },
+        {
+            "title":"Agriculture", 
+            "description": "Agriculture is the science and art of cultivating plants and livestock."
+        },
+        {
+            "title":"Climate Change", 
+            "description": "Climate change is a change in the usual weather found in a place."
+        }
+    ],
+    "floors": ["1", "2", "3"],
+    "rooms": ["1", "2", "3", "4", "5", "6", "7"],
+    "projects": [
+        {
+            "title": "Biodiversity Monitoring System",
+            "description": "Developing an advanced AI-powered system to monitor and analyze changes in biodiversity patterns across different ecosystems.",
+            "category": "Science",
+            "floor": "2",
+            "roomNumber": "2"
+        },
+        {
+            "title": "Precision Farming Enhancement",
+            "description": "Implementing cutting-edge technology such as drones and sensors to optimize crop yield and resource utilization in agriculture.",
+            "category": "Agriculture",
+            "floor": "3",
+            "roomNumber": "4"
+        },
+        {
+            "title": "Sustainable Urban Planning",
+            "description": "Creating a comprehensive urban planning strategy that focuses on reducing carbon footprint, promoting green spaces, and enhancing public transportation.",
+            "category": "Climate Change",
+            "floor": "2",
+            "roomNumber": "7"
+        },
+        {
+            "title": "Space Debris Cleanup",
+            "description": "Designing a space mission to clean up hazardous debris orbiting Earth, contributing to safer space exploration.",
+            "category": "Science",
+            "floor": "1",
+            "roomNumber": "3"
+        },
+        {
+            "title": "Aquaponic Farming Initiative",
+            "description": "Establishing an aquaponics farm that combines aquaculture and hydroponics, offering a sustainable approach to food production.",
+            "category": "Agriculture",
+            "floor": "1",
+            "roomNumber": "6"
+        },
+        {
+            "title": "Renewable Energy Adoption",
+            "description": "Promoting the widespread adoption of renewable energy sources like solar and wind power to decrease reliance on fossil fuels.",
+            "category": "Climate Change",
+            "floor": "3",
+            "roomNumber": "5"
+        }
+    ]
+}

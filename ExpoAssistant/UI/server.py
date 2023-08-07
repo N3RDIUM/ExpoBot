@@ -10,7 +10,6 @@ class Server:
         self.thread.start()
         
         self.data = {
-            "listening": 0,
             "amplitude": 0,
             "speaking": "no-one", # no-one, user, or bot
             "speaking-text": "", # the text that is being spoken
@@ -28,14 +27,8 @@ class Server:
             data = self.client.recv(1024)
             if not data:
                 continue
-            data = data.decode("utf-8").split("\n")
-            for line in data:
-                print("Received:", line)
-                try:
-                    line = json.loads(line)
-                    self.data["amplitude"] = line["amplitude"]
-                    self.data["speaking"] = line["speaking"]
-                    self.data["speaking-text"] = line["speaking-text"]
-                    self.data["user-text"] = line["user-text"]
-                    self.data["listening"] = line["listening"]
-                except: pass
+            data = json.loads(data.decode("utf-8"))
+            self.data["amplitude"] = data["amplitude"]
+            self.data["speaking"] = data["speaking"]
+            self.data["speaking-text"] = data["speaking-text"]
+            self.data["user-text"] = data["user-text"]
