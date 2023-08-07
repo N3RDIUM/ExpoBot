@@ -21,6 +21,7 @@ def askForFeedback(name):
     got_feedback = False
     while not got_feedback:
         feedback = recognizer.recognize_from_mic()
+        elaboration = ""
         # Get the sentiment of the feedback using NLTK
         sentiment = analyzer.polarity_scores(feedback)
         # Remove the compound score
@@ -35,7 +36,6 @@ def askForFeedback(name):
         if score > 0.5:
             if emotion == "pos":
                 speaker.speak_offline("Thank you for your feedback. It encourages us to do better.")
-                saveFeedback(feedback, name)
                 got_feedback = True
             elif emotion == "neg":
                 speaker.speak_offline("Thank you for your valuable feedback. Would you like to elaborate?")
@@ -47,22 +47,20 @@ def askForFeedback(name):
                 if score > 0.5:
                     if emotion == "pos":
                         speaker.speak_offline("Please tell us more about your experience.")
-                        elaboration = recognizer.recognize_from_mic()
+                        elaboration += recognizer.recognize_from_mic()
                         speaker.speak_offline("Thank you for your feedback.")
-                        saveFeedback(feedback + elaboration, name)
                         got_feedback = True
                     elif emotion == "neg":
                         speaker.speak_offline("Thank you for your feedback.")
-                        saveFeedback(feedback, name)
                         got_feedback = True
                     else:
                         speaker.speak_offline("Thank you for your feedback.")
-                        saveFeedback(feedback, name)
                 got_feedback = True
             else:
                 speaker.speak_offline("Thank you for your feedback.")
         else:
             speaker.speak_offline("Sorry, I didn't get that. Please repeat your feedback.")
+    saveFeedback(feedback + " | " + elaboration, name)
     requests.get("http://localhost:5000/feedback/" + name)
 
 def saveFeedback(feedback, name):
