@@ -26,8 +26,11 @@ if not DEV:
     r = Recognizer()
     r.initialize()
 
-logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
-chat = ChatBot()
+    logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
+    chat = ChatBot(speaker = s)
+else:
+    logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
+    chat = ChatBot()
 
 chat.train([[
         "Hello",
@@ -91,6 +94,9 @@ chat.train_fallbacks([
 
 logging.log(logging.INFO, "[MAIN] Training complete! Loading previous cache...")
 chat.load_cache()
+
+logging.log(logging.INFO, "[MAIN] Saving speech cache...")
+chat.create_speech_cache()
 
 logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:

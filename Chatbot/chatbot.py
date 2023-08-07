@@ -4,64 +4,84 @@ import json
 import inflect
 import fuzzywuzzy.fuzz as fuzz
 import _sha256 as sha256
+import tqdm
 import os
-import multiprocessing
+import threading
 import yaml
+
 p = inflect.engine()
 nlp = spacy.load('en_core_web_md')
 import logging
 logging.basicConfig(level=logging.INFO)
 
 THRESHOLD = 0.6 # Similarity threshold
-def similarity(a, b):
-    a = nlp(a)
-    b = nlp(b)
-    return a.similarity(b)
 
 class ChatBot:
-    def __init__(self):
+    def __init__(self, speaker=None):
         logging.log(logging.INFO, "[CHAT] ChatBot __init__")
         self.conversation_data = []
         self.fallbacks = []
         self.cache = {}
+        self.nlp_cache = {}
         if not os.path.exists("./cache.json"):
             with open("./cache.json", "w") as f:
                 f.write("{}")
         self.loader = yaml.SafeLoader
+        self.speaker = speaker
         
     def train(self, conversation_data):
         logging.log(logging.INFO, f"[CHAT] Training chatbot on {len(conversation_data)} conversation data points...")
         self.conversation_data += conversation_data
         self.save_hash = sha256.sha256(str(conversation_data).encode()).hexdigest()
+        
+    def create_speech_cache(self):
+        logging.log(logging.INFO, "[CHAT] Creating text to speech cache...")
+        for data in tqdm.tqdm(self.conversation_data, desc="Creating tts cache"):
+            for utterance in data:
+                if self.speaker and not self.is_question(utterance):
+                    self.speaker.create_offline_cache(utterance, quiet=True)
+    
+    def is_question(self, utterance):
+        return "?" in utterance
     
     def train_fallbacks(self, fallbacks):
         logging.log(logging.INFO, f"[CHAT] Training chatbot on {len(fallbacks)} fallback data points...")
         self.fallbacks += fallbacks
+        
+    def similarity(self, a, b):
+        hashes = [sha256.sha256(a.encode()).hexdigest(), sha256.sha256(b.encode()).hexdigest()]
+        if not hashes[0] in self.cache:
+            a = nlp(a)
+            self.nlp_cache[hashes[0]] = a
+        else:
+            a = self.cache[hashes[0]]
+        if not hashes[1] in self.cache:
+            b = nlp(b)
+            self.nlp_cache[hashes[1]] = b
+        else:
+            b = self.cache[hashes[1]]
+        return a.similarity(b) + self.fuzz_ratio(a, b) / 100
+    
+    def calculate_similarity_dirty(self, a, b):
+        return self.fuzz_ratio(a, b) / 100
     
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
         for utterance in conversation_entry:
-            similarity_score = similarity(query, utterance) + self.fuzz_ratio(query, utterance) / 100
+            similarity_score = self.calculate_similarity_dirty(query, utterance)
+            # TODO: Make nlp similarity better
             similarity_scores.append(similarity_score)
         return similarity_scores
-
+    
     def answer(self, query):
         if query == "":
             return ""
         logging.log(logging.INFO, f"[CHAT] Answering query: {query}")
         if not query in self.cache:
             logging.log(logging.INFO, "[CHAT] Query not in cache. Calculating similarities...")
-            # Create a pool of worker processes
-            pool = multiprocessing.Pool()
-
-            # Use the pool to calculate similarities in parallel
-            similarity_results = pool.starmap(self.calculate_similarity, [(query, entry) for entry in self.conversation_data])
-
-            # Close and join the pool
-            pool.close()
-            pool.join()
-            
-            similarities = similarity_results
+            similarities = []
+            for conversation_entry in tqdm.tqdm(self.conversation_data, desc="Calculating similarities"):
+                similarities.append(self.calculate_similarity(query, conversation_entry))
             logging.log(logging.INFO, "[CHAT] Similarities calculated. Linearizing...")
             
             linear_similarities = []
