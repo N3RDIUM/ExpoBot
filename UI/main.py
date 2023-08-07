@@ -83,7 +83,7 @@ while not glfw.window_should_close(window):
         server = Server()
     
     # TODO: Constantly update the server with the mic amplitude
-    if frames_listening == 0:
+    if frames_listening <= 0:
         glColor3f(1, 1, 1)
     else:
         glColor3f(0, 0, 0)
@@ -111,8 +111,8 @@ while not glfw.window_should_close(window):
                 frames_listening += 1
             else:
                 frames_listening -= 8
-            if frames_listening < 0:
-                frames_listening = 0
+            if frames_listening < -60:
+                frames_listening = -60
             if frames_listening > 60:
                 frames_listening = 60
     else:

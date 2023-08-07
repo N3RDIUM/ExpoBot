@@ -137,3 +137,5 @@ while True:
     finally:
         if comms:
             comms.update({"user-text": ""})
+        if comms:
+            comms.update({"listening": 0})
