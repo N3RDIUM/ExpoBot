@@ -10,6 +10,8 @@ logging.log(logging.INFO, "[MAIN] Importing modules...")
 if not DEV:
     from speaker import Speaker
     from recognizer import Recognizer
+    from servercomms import ServerComms
+    import socket
 from chatbot import ChatBot
 
 logging.log(logging.INFO, "[MAIN] Initializing modules...")
@@ -25,12 +27,19 @@ if not DEV:
     logging.log(logging.INFO, "[MAIN] Initializing speech recognition...")
     r = Recognizer()
     r.initialize()
+    
+    logging.log(logging.INFO, "[MAIN] Connecting to UI...")
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(("localhost", 3030))
+    comms = ServerComms(sock)
+    logging.log(logging.INFO, "[MAIN] Connected to UI!")
 
     logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
     chat = ChatBot(speaker = s)
 else:
     logging.log(logging.INFO, "[MAIN] Initializing and Training ChatBot...")
     chat = ChatBot()
+    comms = None
 
 chat.train([[
         "Hello",
@@ -98,18 +107,29 @@ logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_dat
 while True:
     try:
         if not DEV:
+            if comms:
+                comms.update({"user-text": "Listening..."})
             query = r.recognize_from_mic()
         else:
             query = input("Enter query: ")
+        if comms:
+            comms.update({"user-text": query})
         logging.log(logging.INFO, f"[MAIN] Recognized: {query}")
         ans = chat.answer(query)
         logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: \n\t{ans}")
         if not DEV:
             try:
+                if comms:
+                    comms.update({"speaking": "bot", "speaking-text": ans})
                 logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
                 s.speak_offline(ans)
+                if comms:
+                    comms.update({"speaking": "no-one", "speaking-text": ""})
             except ValueError: pass # chatbot answered with nothing
     except KeyboardInterrupt:
         logging.log(logging.INFO, "[MAIN] KeyboardInterrupt detected. Saving cache and exiting...")
         chat.save_cache()
         break
+    finally:
+        if comms:
+            comms.update({"user-text": ""})
