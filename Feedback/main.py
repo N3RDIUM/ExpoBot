@@ -23,42 +23,39 @@ def askForFeedback(name):
     while not got_feedback and try_count < 3:
         feedback = recognizer.recognize_from_mic()
         elaboration = ""
-        # Get the sentiment of the feedback using NLTK
-        sentiment = analyzer.polarity_scores(feedback)
-        # Remove the compound score
-        del sentiment["compound"]
-        # Remove the neutral score
-        del sentiment["neu"]
-        # Sort the sentiment by the most likely emotion
-        sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
-        # Get the most likely emotion
-        emotion = sentiment[0][0]
-        # Get the score of the most likely emotion
-        score = sentiment[0][1]
-        if emotion == "pos":
-            speaker.speak_offline("Thank you for your feedback. It encourages us to do better.")
-            got_feedback = True
-        elif emotion == "neg":
-            speaker.speak_offline("Thank you for your valuable feedback. Would you like to elaborate?")
-            elaborate = recognizer.recognize_from_mic()
-            sentiment = analyzer.polarity_scores(elaborate)
+        if not feedback and not feedback == "":
+            # Get the sentiment of the feedback using NLTK
+            sentiment = analyzer.polarity_scores(feedback)
+            # Sort the sentiment by the most likely emotion
             sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
+            # Get the most likely emotion
             emotion = sentiment[0][0]
+            # Get the score of the most likely emotion
             score = sentiment[0][1]
-            if score > 0.2:
-                if emotion == "pos":
-                    speaker.speak_offline("Please tell us more about your experience.")
-                    elaboration += recognizer.recognize_from_mic()
-                    speaker.speak_offline("Thank you for your feedback.")
-                    got_feedback = True
-                elif emotion == "neg":
-                    speaker.speak_offline("Thank you for your feedback.")
-                    got_feedback = True
-                else:
-                    speaker.speak_offline("Thank you for your feedback.")
-            got_feedback = True
+            if emotion == "pos":
+                speaker.speak_offline("Thank you for your feedback. It encourages us to do better.")
+                got_feedback = True
+            elif emotion in ["neg", "neu", "compound"]:
+                speaker.speak_offline("Thank you for your valuable feedback. Would you like to elaborate?")
+                elaborate = recognizer.recognize_from_mic()
+                sentiment = analyzer.polarity_scores(elaborate)
+                sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
+                emotion = sentiment[0][0]
+                score = sentiment[0][1]
+                if score > 0.2:
+                    if emotion == "pos":
+                        speaker.speak_offline("Please tell us more about your experience.")
+                        elaboration += recognizer.recognize_from_mic()
+                        speaker.speak_offline("Thank you for your feedback.")
+                        got_feedback = True
+                    elif emotion == "neg":
+                        speaker.speak_offline("Thank you for your feedback.")
+                        got_feedback = True
+                    else:
+                        speaker.speak_offline("Thank you for your feedback.")
+                got_feedback = True
         else:
-            speaker.speak_offline("Sorry, I didn't get that. Please repeat your feedback.")
+            speaker.speak_offline("Sorry, I couldn't hear you. Could you please repeat?")
             try_count += 1
     saveFeedback(feedback + " | " + elaboration, name)
     requests.get("http://localhost:5000/feedback-given/" + name)
