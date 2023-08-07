@@ -2,6 +2,7 @@ import json
 import threading
 import pyaudio
 import time
+import audioop
 
 class ServerComms:
     def __init__(self, sock):
@@ -35,7 +36,5 @@ class ServerComms:
             self.update(self.data)
             
     def get_amplitude(self, stream):
-        # Get the loudness of the mic
-        data = stream.read(1024)
-        return sum([abs(x) for x in data]) / len(data)
-    
+        # Get the loudness of the mic input
+        return audioop.rms(stream.read(1024), 2)

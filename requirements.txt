@@ -11,9 +11,11 @@ unidic-lite
 inflect
 fuzzywuzzy
 python-levenshtein
+audioop
 
 opencv-python
 face-recognition
 
 pyopengl
 glfw
+noise
