@@ -14,7 +14,7 @@ nlp = spacy.load('en_core_web_md')
 import logging
 logging.basicConfig(level=logging.INFO)
 
-THRESHOLD = 0.6 # Similarity threshold
+THRESHOLD = 0.8 # Similarity threshold
 
 class ChatBot:
     def __init__(self, speaker=None):

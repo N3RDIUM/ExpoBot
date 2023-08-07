@@ -20,6 +20,8 @@ def get_spinner():
         if spinner_index >= len(spinner):
             spinner_index = 0
     return spinner[spinner_index]
+average_amplitude = 0
+amplitude_samples = []
 
 # Main loop
 while not glfw.window_should_close(window):
@@ -39,8 +41,14 @@ while not glfw.window_should_close(window):
             text((10, 10), "Waiting for client " + get_spinner())
         if server.connected:
             text((10, 10), "Connected to client")
+            amplitude_samples.append(server.data["amplitude"])
+            if len(amplitude_samples) > 1024:
+                amplitude_samples.pop(0)
+            average_amplitude = sum(amplitude_samples) / len(amplitude_samples)
             display_debug((10, 20), [
                 "Amplitude: " + str(server.data["amplitude"]),
+                "Average amplitude: " + str(average_amplitude),
+                "Amplitude diff: " + str(server.data["amplitude"] - average_amplitude),
                 "Speaking: " + server.data["speaking"],
                 "User text: " + server.data["user-text"],
                 "Speaking text: " + server.data["speaking-text"]
