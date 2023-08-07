@@ -113,6 +113,8 @@ while not glfw.window_should_close(window):
                 frames_listening -= 8
             if frames_listening < 0:
                 frames_listening = 0
+            if frames_listening > 60:
+                frames_listening = 60
     else:
         text((10, 10), "Waiting for server " + get_spinner())
     
