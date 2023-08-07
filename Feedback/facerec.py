@@ -68,7 +68,7 @@ while True:
                 try:
                     faces[fname] = fr.face_encodings(fr.load_image_file(f"faces/{fname}.jpg"))[0]
                     print("Loaded face: " + fname)
-                    update_facedata({fname: {"seen":[time.time()]}})
+                    update_facedata({fname: {"seen":[time.time()], "feedback": False}})
                 except:
                     print("Error loading face: " + fname)
             else:
