@@ -74,14 +74,15 @@ chat.train([[
 logging.log(logging.INFO, "[MAIN] Training chatbot on exposition data...")
 chat.train_expo_data(os.path.join(os.path.dirname(os.path.abspath(__file__)), "expo_data.json"))
 
-logging.log(logging.INFO, "[MAIN] Training chatbot on chatterbot corpus...")
-chat.train_from_corpus(os.path.join(os.path.dirname(os.path.abspath(__file__)), "chatterbot-corpus-data/"), include=[
-    "ai",
-    "botprofile",
-    "computers",
-    "conversations",
-    "science",
-])
+# Disabled for now ;-;
+# logging.log(logging.INFO, "[MAIN] Training chatbot on chatterbot corpus...")
+# chat.train_from_corpus(os.path.join(os.path.dirname(os.path.abspath(__file__)), "chatterbot-corpus-data/"), include=[
+#     "ai",
+#     "botprofile",
+#     "computers",
+#     "conversations",
+#     "science",
+# ])
 
 logging.log(logging.INFO, "[MAIN] Training chatbot on fallbacks...")
 chat.train_fallbacks([

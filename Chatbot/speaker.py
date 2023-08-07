@@ -62,7 +62,7 @@ class Speaker():
             self.tts.tts_to_file(
                 text=text,
                 file_path=filename,
-                emotion="neutral",
+                emotion="Confident",
             )
             self.move2cache(filename, text, quiet=quiet)
             self.spoken += 1
