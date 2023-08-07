@@ -64,7 +64,7 @@ def askForFeedback(name):
     requests.get("http://localhost:5000/feedback-given/" + name)
 
 def saveFeedback(feedback, name):
-    csvpath = os.path.join(os.path.dirname(__file__), "feedbacks.csv")
+    csvpath = "feedbacks.csv"
     with open(csvpath, "a") as f:
         f.write(name + "," + feedback + "\n")
 
