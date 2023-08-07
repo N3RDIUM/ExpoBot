@@ -134,6 +134,9 @@ while True:
         logging.log(logging.INFO, "[MAIN] KeyboardInterrupt detected. Saving cache and exiting...")
         chat.save_cache()
         break
+    except Exception as e:
+        logging.log(logging.WARNING, f"[MAIN] Exception occured: {e}")
+        chat.save_cache()
     finally:
         if comms:
             comms.update({"user-text": ""})
