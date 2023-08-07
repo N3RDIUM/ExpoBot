@@ -134,8 +134,8 @@ while not glfw.window_should_close(window):
                 frames_listening += 1
             else:
                 frames_listening -= 8
-            if frames_listening < -60:
-                frames_listening = -60
+            if frames_listening < 0:
+                frames_listening = 0
             if frames_listening > 60:
                 frames_listening = 60
     else:
@@ -201,7 +201,10 @@ while not glfw.window_should_close(window):
             # Draw the dot
             x = i * 2 - len(dots) + 1
             y = j * 2 - len(dots[i]) + 1
-            point((x, y, -100), dots[i][j][0], color=color)
+            point((
+                x - noise.pnoise1((_frame - i*j) / 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 200) * 2, 
+                y - noise.pnoise1((_frame - i*j) / 100 + 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 300) * 2,
+            -100), dots[i][j][0], color=color)
     # Keep running
     glfw.poll_events()
     glfw.swap_buffers(window)
