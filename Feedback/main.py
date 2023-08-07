@@ -35,31 +35,28 @@ def askForFeedback(name):
         emotion = sentiment[0][0]
         # Get the score of the most likely emotion
         score = sentiment[0][1]
-        if score > 0.2:
-            if emotion == "pos":
-                speaker.speak_offline("Thank you for your feedback. It encourages us to do better.")
-                got_feedback = True
-            elif emotion == "neg":
-                speaker.speak_offline("Thank you for your valuable feedback. Would you like to elaborate?")
-                elaborate = recognizer.recognize_from_mic()
-                sentiment = analyzer.polarity_scores(elaborate)
-                sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
-                emotion = sentiment[0][0]
-                score = sentiment[0][1]
-                if score > 0.2:
-                    if emotion == "pos":
-                        speaker.speak_offline("Please tell us more about your experience.")
-                        elaboration += recognizer.recognize_from_mic()
-                        speaker.speak_offline("Thank you for your feedback.")
-                        got_feedback = True
-                    elif emotion == "neg":
-                        speaker.speak_offline("Thank you for your feedback.")
-                        got_feedback = True
-                    else:
-                        speaker.speak_offline("Thank you for your feedback.")
-                got_feedback = True
-            else:
-                speaker.speak_offline("Thank you for your feedback.")
+        if emotion == "pos":
+            speaker.speak_offline("Thank you for your feedback. It encourages us to do better.")
+            got_feedback = True
+        elif emotion == "neg":
+            speaker.speak_offline("Thank you for your valuable feedback. Would you like to elaborate?")
+            elaborate = recognizer.recognize_from_mic()
+            sentiment = analyzer.polarity_scores(elaborate)
+            sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
+            emotion = sentiment[0][0]
+            score = sentiment[0][1]
+            if score > 0.2:
+                if emotion == "pos":
+                    speaker.speak_offline("Please tell us more about your experience.")
+                    elaboration += recognizer.recognize_from_mic()
+                    speaker.speak_offline("Thank you for your feedback.")
+                    got_feedback = True
+                elif emotion == "neg":
+                    speaker.speak_offline("Thank you for your feedback.")
+                    got_feedback = True
+                else:
+                    speaker.speak_offline("Thank you for your feedback.")
+            got_feedback = True
         else:
             speaker.speak_offline("Sorry, I didn't get that. Please repeat your feedback.")
             try_count += 1
