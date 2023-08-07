@@ -1,11 +1,20 @@
 import cv2
 import face_recognition as fr
 import uuid
+import flask
+import threading
+import time
 
 # Live face recognition
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+# Face data: Last seen
+face_data = {}
+def update_facedata(data):
+    global face_data
+    face_data.update(data)
 
 # Load known faces
 import os
@@ -14,14 +23,25 @@ for file in os.listdir("faces"):
     if file.endswith(".jpg"):
         try:
             faces[file[:-4]] = fr.face_encodings(fr.load_image_file("faces/" + file))[0]
+            face_data[file[:-4]] = {"seen":[0]}
             print("Loaded face: " + file)
         except:
             print("Error loading face: " + file)
 print("Loaded " + str(len(faces)) + " faces")
 
+def start_server():
+    app = flask.Flask(__name__)
+    @app.route("/faces")
+    def get_faces():
+        return flask.jsonify(face_data)
+    app.run(port=5000)
+
+thread = threading.Thread(target=start_server)
+thread.start()
+    
 while True:
     ret, frame = cap.read()
-    downscale_factor = 2
+    downscale_factor = 1
     downscaled_frame = cv2.resize(frame, (0, 0), fx=1/downscale_factor, fy=1/downscale_factor)
     if ret:        
         face_locations = fr.face_locations(downscaled_frame)
@@ -40,6 +60,7 @@ while True:
                 try:
                     faces[fname] = fr.face_encodings(fr.load_image_file(f"faces/{fname}.jpg"))[0]
                     print("Loaded face: " + fname)
+                    update_facedata({fname: {"seen":[time.time()]}})
                 except:
                     print("Error loading face: " + fname)
             else:
@@ -57,10 +78,20 @@ while True:
                     cv2.rectangle(frame, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size / 2)*downscale_factor), (int(avg_x + size / 2)*downscale_factor, int(avg_y + size / 2)*downscale_factor), (0, 255, 0), 1)
                     cv2.putText(frame, name, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size)*downscale_factor), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
                     cv2.circle(frame, (int(avg_x)*downscale_factor, int(avg_y)*downscale_factor), 1, (0, 255, 0), 3)
-                
+                # Update last seen
+                if name in face_data:
+                    # If it's been more than 2 minutes since the last time we saw this face, update
+                    if face_data[name]["seen"][-1] < time.time() - 120:
+                        if face_data[name]["seen"][-1] == 0:
+                            face_data[name]["seen"] = []
+                        face_data[name]["seen"].append(time.time())
+                    else:
+                        face_data[name]["seen"][-1] = time.time()
+        print(face_data)                
         # Show the frame
         cv2.imshow("Video", frame)
         if cv2.waitKey(1) & 0xFF == ord("q"):
+            thread.join()
             break
     else:
         print("Error reading frame from camera")

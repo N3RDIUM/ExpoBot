@@ -12,6 +12,7 @@ inflect
 fuzzywuzzy
 python-levenshtein
 audioop
+flask
 
 opencv-python
 face-recognition
