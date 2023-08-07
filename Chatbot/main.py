@@ -107,8 +107,6 @@ logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_dat
 while True:
     try:
         if not DEV:
-            if comms:
-                comms.update({"user-text": "Listening..."})
             query = r.recognize_from_mic()
         else:
             query = input("Enter query: ")
