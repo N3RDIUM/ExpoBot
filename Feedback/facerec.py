@@ -34,6 +34,13 @@ def start_server():
     @app.route("/faces")
     def get_faces():
         return flask.jsonify(face_data)
+    @app.route("/feedback-given/<name>")
+    def feedback_given(name):
+        if name in face_data:
+            face_data[name]["seen"] = []
+            return flask.jsonify({"success": True})
+        else:
+            return flask.jsonify({"success": False})
     app.run(port=5000)
 
 thread = threading.Thread(target=start_server)
@@ -81,7 +88,7 @@ while True:
                 # Update last seen
                 if name in face_data:
                     # If it's been more than 2 minutes since the last time we saw this face, update
-                    if face_data[name]["seen"][-1] < time.time() - 120:
+                    if face_data[name]["seen"][-1] < time.time() - 20:
                         if face_data[name]["seen"][-1] == 0:
                             face_data[name]["seen"] = []
                         face_data[name]["seen"].append(time.time())
