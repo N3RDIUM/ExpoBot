@@ -27,6 +27,8 @@ def askForFeedback(name):
         sentiment = analyzer.polarity_scores(feedback)
         # Remove the compound score
         del sentiment["compound"]
+        # Remove the neutral score
+        del sentiment["neu"]
         # Sort the sentiment by the most likely emotion
         sentiment = sorted(sentiment.items(), key=lambda x: x[1], reverse=True)
         # Get the most likely emotion
