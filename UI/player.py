@@ -7,7 +7,7 @@ class Player(object):
         self.position = position
         self.rotation = rotation
         self.mouse_prev = glfw.get_cursor_pos(glfw.get_current_context())
-        self.speed = 2
+        self.speed = 20
     
     def update(self, window):
         # move forward

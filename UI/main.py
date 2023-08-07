@@ -33,7 +33,7 @@ def _setup_3d():
     glLoadIdentity()
     glViewport(0, 0, *glfw.get_window_size(window))
     window_size = glfw.get_window_size(window)
-    gluPerspective(45, window_size[0] / window_size[1], 0.1, 100)
+    gluPerspective(45, window_size[0] / window_size[1], 0.1, 100000)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     glEnable(GL_DEPTH_TEST)
