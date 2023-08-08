@@ -1,13 +1,20 @@
 # import spacy
+print("Import random")
 import random
+print("Import json")
 import json
+print("Import inflect")
 import inflect
+print("Import fuzzywuzzy")
 import fuzzywuzzy.fuzz as fuzz
+print("Import sha256")
 import _sha256 as sha256
+print("Import tqdm")
 import tqdm
 import os
 # import threading
 import yaml
+
 
 p = inflect.engine()
 # nlp = spacy.load('en_core_web_md')
