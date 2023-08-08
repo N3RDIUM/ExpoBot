@@ -46,6 +46,12 @@ def start_server():
 
 thread = threading.Thread(target=start_server)
 thread.start()
+
+import subprocess
+import sys
+import os
+
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "main.py")])
     
 while True:
     ret, frame = cap.read()

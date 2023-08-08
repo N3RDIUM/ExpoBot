@@ -4,7 +4,6 @@ from speaker import Speaker
 from time import sleep
 from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
-import os
 nltk.download('vader_lexicon')
 
 speaker = Speaker()
