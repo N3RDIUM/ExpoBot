@@ -22,7 +22,7 @@ faces = {}
 for file in os.listdir("faces"):
     if file.endswith(".jpg"):
         try:
-            faces[file[:-4]] = fr.face_encodings(fr.load_image_file("faces/" + file))[0]
+            faces[file[:-4]] = fr.face_encodings(fr.load_image_file("faces/" + file), model="large")[0]
             face_data[file[:-4]] = {"seen":[0], "feedback": False}
             print("Loaded face: " + file)
         except:
@@ -45,21 +45,21 @@ def start_server():
     app.run(port=5000)
 
 thread = threading.Thread(target=start_server)
-thread.start()
+# thread.start()
 
 import subprocess
 import sys
 import os
 
-subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "main.py")])
+# subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "main.py")])
     
 while True:
     ret, frame = cap.read()
     downscale_factor = 1
     downscaled_frame = cv2.resize(frame, (0, 0), fx=1/downscale_factor, fy=1/downscale_factor)
     if ret:        
-        face_locations = fr.face_locations(downscaled_frame)
-        face_encodings = fr.face_encodings(downscaled_frame, face_locations)
+        face_locations = fr.face_locations(downscaled_frame, model="hog")
+        face_encodings = fr.face_encodings(downscaled_frame, face_locations, model="large")
         for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
             matches = fr.compare_faces(list(faces.values()), face_encoding)
             if True not in matches:
@@ -72,7 +72,7 @@ while True:
                 _right = min(frame.shape[1], right + factor)
                 cv2.imwrite(f"faces/{fname}.jpg", frame[_top*downscale_factor : _bottom*downscale_factor, _left*downscale_factor : _right*downscale_factor])
                 try:
-                    faces[fname] = fr.face_encodings(fr.load_image_file(f"faces/{fname}.jpg"))[0]
+                    faces[fname] = fr.face_encodings(fr.load_image_file(f"faces/{fname}.jpg"), model="large")[0]
                     print("Loaded face: " + fname)
                     update_facedata({fname: {"seen":[time.time()], "feedback": False}})
                 except:
@@ -81,7 +81,7 @@ while True:
                 # Find the name of the face
                 name = list(faces.keys())[matches.index(True)]
                 # Mark left eye
-                face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right])
+                face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="large")
                 for face_landmarks in face_landmarks_list:
                     eye = face_landmarks["left_eye"]
                     avg_x = sum([x[0] for x in eye]) / len(eye)

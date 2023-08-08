@@ -1,4 +1,4 @@
-import spacy
+# import spacy
 import random
 import json
 import inflect
@@ -6,11 +6,11 @@ import fuzzywuzzy.fuzz as fuzz
 import _sha256 as sha256
 import tqdm
 import os
-import threading
+# import threading
 import yaml
 
 p = inflect.engine()
-nlp = spacy.load('en_core_web_md')
+# nlp = spacy.load('en_core_web_md')
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -48,19 +48,19 @@ class ChatBot:
         logging.log(logging.INFO, f"[CHAT] Training chatbot on {len(fallbacks)} fallback data points...")
         self.fallbacks += fallbacks
         
-    def similarity(self, a, b):
-        hashes = [sha256.sha256(a.encode()).hexdigest(), sha256.sha256(b.encode()).hexdigest()]
-        if not hashes[0] in self.cache:
-            a = nlp(a)
-            self.nlp_cache[hashes[0]] = a
-        else:
-            a = self.cache[hashes[0]]
-        if not hashes[1] in self.cache:
-            b = nlp(b)
-            self.nlp_cache[hashes[1]] = b
-        else:
-            b = self.cache[hashes[1]]
-        return a.similarity(b) + self.fuzz_ratio(a, b) / 100
+    # def similarity(self, a, b):
+    #     hashes = [sha256.sha256(a.encode()).hexdigest(), sha256.sha256(b.encode()).hexdigest()]
+    #     if not hashes[0] in self.cache:
+    #         a = nlp(a)
+    #         self.nlp_cache[hashes[0]] = a
+    #     else:
+    #         a = self.cache[hashes[0]]
+    #     if not hashes[1] in self.cache:
+    #         b = nlp(b)
+    #         self.nlp_cache[hashes[1]] = b
+    #     else:
+    #         b = self.cache[hashes[1]]
+    #     return a.similarity(b) + self.fuzz_ratio(a, b) / 100
     
     def calculate_similarity_dirty(self, a, b):
         return self.fuzz_ratio(a, b) / 100
