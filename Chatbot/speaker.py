@@ -1,10 +1,15 @@
 # imports
 import os
 import shutil
+print("Import playsound")
 import playsound
+print("[SPEAKER] Importing TTS...")
 from TTS.api import TTS
+print("[SPEAKER] Importing gtts...")
 import gtts
+print("[SPEAKER] Importing playsound...")
 import playsound
+print("[SPEAKER] Importing sha256...")
 import _sha256
 
 import logging
