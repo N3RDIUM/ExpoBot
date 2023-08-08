@@ -30,12 +30,7 @@ Then, install the requirements:
 To run the bot, run:
 
 ```
-python UI/main.py
-```
-Then, open up another terminal, and run:
-
-```
-python bot.py
+python UIBot/main.py
 ```
 
 ### Running the feedback system

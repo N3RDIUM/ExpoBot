@@ -4,8 +4,12 @@ from OpenGL.GLUT import *
 import glfw
 from text import text, display_debug
 import noise
-import math
 import numpy as np
+import subprocess
+import sys
+import os
+
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "../Chatbot/main.py")])
 
 from server import Server
 from player import Player
