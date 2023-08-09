@@ -17,11 +17,13 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
-import json
-OPENAI_API_KEY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json")))["OPENAI_API_KEY"]
-
 import openai
-openai.api_key = OPENAI_API_KEY
+import json
+if not "USELOCAL" in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json"))):
+    OPENAI_API_KEY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json")))["OPENAI_API_KEY"]
+    openai.api_key = OPENAI_API_KEY
+else:
+    openai.api_base = "http://localhost:5000/v1"
 
 def get_response(query, engine="ada"):
     response = openai.Completion.create(
