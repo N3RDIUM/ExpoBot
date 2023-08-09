@@ -8,6 +8,7 @@ from speaker import Speaker
 from nltk.sentiment import SentimentIntensityAnalyzer
 import nltk
 from googletrans import Translator
+from time import sleep
 
 nltk.download('vader_lexicon')
 
@@ -30,14 +31,13 @@ def askForFeedback(name):
     requests.get("http://localhost:5000/feedback-given/" + name)
 
 while True:
-    # sleep(1/12)
-    # try:
-    #     faces = requests.get("http://localhost:5000/faces").json()
-    #     print(faces)
-    #     for face in faces:
-    #         if len(faces[face]["seen"]) >= 2:
-    #             print(face + ", Please give your valuable feedback")
-    #             askForFeedback(face)
-    # except KeyboardInterrupt:
-    #     break
-    askForFeedback("test")
+    sleep(1/12)
+    try:
+        faces = requests.get("http://localhost:5000/faces").json()
+        print(faces)
+        for face in faces:
+            if len(faces[face]["seen"]) >= 2:
+                print(face + ", Please give your valuable feedback")
+                askForFeedback(face)
+    except KeyboardInterrupt:
+        break
