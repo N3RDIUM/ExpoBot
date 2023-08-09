@@ -89,7 +89,7 @@ amplitude_samples = []
 amplitude_samples_large = []
 _amplitude_samples = []
 smooth_amplitude = 0
-downscale = 4
+downscale = 3
 glEnable(GL_POINT_SMOOTH)
 glHint(GL_POINT_SMOOTH_HINT, GL_NICEST)
 glEnable(GL_BLEND)
