@@ -40,9 +40,9 @@ class Speaker():
             except:
                 pass
         self.spoken = 0
-        logging.log(logging.INFO, "[SPEAKER] TTS Models: "+str(TTS.list_models()))
-        logging.log(logging.INFO, "[SPEAKER] Loading TTS model...")
         if not self.old_hw:
+            logging.log(logging.INFO, "[SPEAKER] TTS Models: "+str(TTS.list_models()))
+            logging.log(logging.INFO, "[SPEAKER] Loading TTS model...")
             self.tts = TTS(TTS.list_models()[model], progress_bar=True)
         else:
             self.tts = None
