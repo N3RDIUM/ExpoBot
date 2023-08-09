@@ -30,7 +30,6 @@ class Server:
                 continue
             data = data.decode("utf-8").split("\n")
             for line in data:
-                print("Received:", line)
                 try:
                     line = json.loads(line)
                     self.data["amplitude"] = line["amplitude"]
