@@ -34,7 +34,7 @@ def get_response(query, engine="ada"):
         presence_penalty=0.6,
         stop=["\n", " Human:", " AI:"]
     )
-    return response["choices"][0]["text"]
+    return str(response["choices"][0]["text"])
 
 class ChatBot:
     def __init__(self, speaker=None):
