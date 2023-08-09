@@ -90,6 +90,7 @@ amplitude_samples_large = []
 _amplitude_samples = []
 smooth_amplitude = 0
 downscale = 4
+glEnable(GL_POINT_SMOOTH)
 glHint(GL_POINT_SMOOTH_HINT, GL_NICEST)
 dots = np.zeros((100 // downscale, 50 // downscale, 1))
 dot_vbo = glGenBuffers(1)
