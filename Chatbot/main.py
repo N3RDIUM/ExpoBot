@@ -30,7 +30,7 @@ if not DEV:
     
     logging.log(logging.INFO, "[MAIN] Connecting to UI...")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("localhost", 3030))
+    sock.connect(("localhost", 8080))
     comms = ServerComms(sock)
     logging.log(logging.INFO, "[MAIN] Connected to UI!")
 

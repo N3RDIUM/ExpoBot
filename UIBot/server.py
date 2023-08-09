@@ -19,7 +19,7 @@ class Server:
         
     def run(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(("localhost", 3030))
+        self.socket.bind(("localhost", 8080))
         self.initialized = True
         self.socket.listen(1)
         self.client, self.address = self.socket.accept()
