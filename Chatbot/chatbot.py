@@ -39,6 +39,7 @@ def get_response(query, engine="ada"):
         stop=["\n", " Human:", " AI:"]
     )
     return str(response["choices"][0]["text"])
+get_response("Hello, how are you?")
 
 class ChatBot:
     def __init__(self, speaker=None):
