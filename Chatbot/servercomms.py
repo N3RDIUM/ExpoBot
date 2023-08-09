@@ -1,6 +1,5 @@
 import json
 import threading
-print("Importing pyaudio...")
 import pyaudio
 import time
 import audioop

@@ -1,7 +1,6 @@
 wheel
 pyaudio
 speechrecognition
-spacy
 tts
 gtts
 playsound
@@ -11,12 +10,9 @@ unidic-lite
 inflect
 fuzzywuzzy
 python-levenshtein
-audioop
 flask
-
 opencv-python
 face-recognition
-
 pyopengl
 glfw
 noise

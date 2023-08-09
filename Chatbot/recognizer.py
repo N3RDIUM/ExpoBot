@@ -1,8 +1,8 @@
 # imports
 import logging
 logging.basicConfig(level=logging.INFO)
-print("[RECOGNIZER] Importing speech_recognition...")
 import speech_recognition as sr
+
 class Recognizer():
     def __init__(self):
         logging.log(logging.INFO, "[RECOGNIZER] Recognizer __init__")

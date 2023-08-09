@@ -165,3 +165,4 @@ tts_cache
 cache.json
 feedback_recordings
 feedbacks.csv
+nltk_data
