@@ -1,7 +1,6 @@
 import logging
 logging.basicConfig(level=logging.INFO)
 DEV = False
-OLD_HW = False 
 # for older hardware, set this to True
 # TODO: Also cache fallbacks
 
@@ -20,7 +19,7 @@ from chatbot import ChatBot
 
 logging.log(logging.INFO, "[MAIN] Initializing modules...")
 if not DEV:
-    s = Speaker(OLD_HW)
+    s = Speaker()
     s.initialize()
 
     logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")

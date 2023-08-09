@@ -6,6 +6,7 @@ from TTS.api import TTS
 import gtts
 import playsound
 import _sha256
+OLD_HW = False
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -14,10 +15,10 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('TTS').setLevel(logging.WARNING)
 
 class Speaker():
-    def __init__(self, old_hw=False):
+    def __init__(self):
         self.initialized = False
         self.speaking = False
-        self.old_hw = old_hw
+        self.old_hw = OLD_HW
         
     def initialize(self, model=16):
         self.SAVE_PATH = "speech_tts/"
