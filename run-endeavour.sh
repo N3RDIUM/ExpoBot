@@ -12,7 +12,11 @@ if [ ! -d "feedback_recordings" ]; then
 fi
 # If the "feedbacks.csv" file doesn't exist, create it
 if [ ! -f "feedbacks.json" ]; then
-  echo "[]" > feedbacks.json
+  echo "{}" > feedbacks.json
+fi
+# If the "config.json" file doesn't exist, create it
+if [ ! -f "config.json" ]; then
+  echo "{\"OLD_HARDWARE\":0}" > feedbacks.json
 fi
 # If the "tts_cache" folder doesn't exist, create it
 if [ ! -d "tts_cache" ]; then

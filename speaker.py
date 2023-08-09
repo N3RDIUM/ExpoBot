@@ -5,9 +5,12 @@ import playsound
 import gtts
 import playsound
 import _sha256
-OLD_HW = False
+import json
+OLD_HW = bool(json.load(open("config.json"))["OLD_HARDWARE"])
 if not OLD_HW:
     from TTS.api import TTS
+else:
+    print("[WARN] OLD_HARDWARE is set to True, TTS will not work offline!")
 
 import logging
 logging.basicConfig(level=logging.INFO)
