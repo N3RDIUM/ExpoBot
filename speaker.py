@@ -14,9 +14,10 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('TTS').setLevel(logging.WARNING)
 
 class Speaker():
-    def __init__(self):
+    def __init__(self, old_hw=False):
         self.initialized = False
         self.speaking = False
+        self.old_hw = old_hw
         
     def initialize(self, model=16):
         self.SAVE_PATH = "speech_tts/"
@@ -36,7 +37,10 @@ class Speaker():
         self.spoken = 0
         logging.log(logging.INFO, "[SPEAKER] TTS Models: "+str(TTS.list_models()))
         logging.log(logging.INFO, "[SPEAKER] Loading TTS model...")
-        self.tts = TTS(TTS.list_models()[model], progress_bar=True)
+        if not self.old_hw:
+            self.tts = TTS(TTS.list_models()[model], progress_bar=True)
+        else:
+            self.tts = None
         logging.log(logging.INFO, "[SPEAKER] TTS model loaded!")
 
     def speak_offline(self, text):
@@ -46,11 +50,14 @@ class Speaker():
             playsound.playsound(self.CACHE_PATH+_sha256.sha256(text.encode()).hexdigest()+".mp3")
             return
         filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
-        self.tts.tts_to_file(
-            text=text,
-            file_path=filename,
-            gpu=True
-        )
+        if self.tts:
+            self.tts.tts_to_file(
+                text=text,
+                file_path=filename,
+                emotion="Confident",
+            )
+        else:
+            gtts.gTTS(text=text, lang="en").save(filename)
         playsound.playsound(filename)
         self.move2cache(filename, text)
         self.spoken += 1
@@ -59,11 +66,14 @@ class Speaker():
         self.cache = os.listdir(self.CACHE_PATH)
         if not _sha256.sha256(text.encode()).hexdigest()+".mp3" in self.cache:
             filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
-            self.tts.tts_to_file(
-                text=text,
-                file_path=filename,
-                emotion="Confident",
-            )
+            if self.tts:
+                self.tts.tts_to_file(
+                    text=text,
+                    file_path=filename,
+                    emotion="Confident",
+                )
+            else:
+                gtts.gTTS(text=text, lang="en").save(filename)
             self.move2cache(filename, text, quiet=quiet)
             self.spoken += 1
     
