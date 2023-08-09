@@ -127,7 +127,7 @@ while not glfw.window_should_close(window):
             _amplitude_samples.append(server.data["amplitude"])
             if len(amplitude_samples) > 32:
                 amplitude_samples.pop(0)
-            if len(_amplitude_samples) > 64:
+            if len(_amplitude_samples) > 16:
                 _amplitude_samples.pop(0)
             smooth_amplitude = sum(_amplitude_samples) / len(_amplitude_samples)
             amplitude_samples.append(smooth_amplitude)
@@ -167,36 +167,36 @@ while not glfw.window_should_close(window):
         try:
             _frame += 1 + abs(smooth_amplitude - sum(amplitude_samples_large) / len(amplitude_samples_large)) / 32
         except: _frame += 1
-        sphere((0, 0, -10), (smooth_amplitude + noise.pnoise1(_frame / 200 - 400)*50) / 1024 + 0.24, (
+        sphere((0, 0, -10), (smooth_amplitude*5 + noise.pnoise1(_frame / 200 - 400)*50) / 1024 + 0.24, (
             min(1 - (noise.pnoise1(_frame / 100) + frames_listening / 60), 1),
             min(1 - (noise.pnoise1(_frame / 100-200) + frames_listening / 60), 1),
             min(1 - (noise.pnoise1(_frame / 100-300) + frames_listening / 60), 1),
         ))
         a1 = 0
         try:
-            a1 = amplitude_samples[len(amplitude_samples) // 4] * 2
+            a1 = amplitude_samples[len(amplitude_samples) // 4]
         except: pass
         
         a2 = 0
         try:
-            a2 = amplitude_samples[len(amplitude_samples) // 2] * 3
+            a2 = amplitude_samples[len(amplitude_samples) // 2] * 4
         except: pass
         
         a3 = 0
         try:
             a3 = amplitude_samples[len(amplitude_samples) // 4 * 3] * 4
         except: pass
-        sphere((0, 0, -20), (a1 + noise.pnoise1(_frame / 200 - 1000)*80) / 1024 + 1.24, (
+        sphere((0, 0, -20), (a1*5 + noise.pnoise1(_frame / 200 - 1000)*80) / 1024 + 1.24, (
             123/255 + noise.pnoise1(_frame / 100) / 4,
             213/255 + noise.pnoise1(_frame / 100 + 100) / 4,
             252/255 + noise.pnoise1(_frame / 100 + 200) / 4,
         ))
-        sphere((0, 0, -40), (a2 + noise.pnoise1(_frame / 200 - 2000)*100) / 1024 + 4.24, (
+        sphere((0, 0, -40), (a2*5 + noise.pnoise1(_frame / 200 - 2000)*100) / 1024 + 4.24, (
             7/255 + noise.pnoise1(_frame / 100 + 300) / 4,
             178/255 + noise.pnoise1(_frame / 100 + 400) / 4,
             252/255 + noise.pnoise1(_frame / 100 + 500) / 4,
         ))
-        sphere((0, 0, -80), (a3 + noise.pnoise1(_frame / 200 - 4000)*256) / 1024 + 10.24, (
+        sphere((0, 0, -80), (a3*5 + noise.pnoise1(_frame / 200 - 4000)*256) / 1024 + 10.24, (
             1/255 + noise.pnoise1(_frame / 100 + 600) / 4,
             130/255 + noise.pnoise1(_frame / 100 + 700) / 4,
             186/255 + noise.pnoise1(_frame / 100 + 800) / 4,
