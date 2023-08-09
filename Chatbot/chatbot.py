@@ -1,3 +1,4 @@
+import spacy
 import random
 import json
 import inflect
@@ -5,13 +6,15 @@ import fuzzywuzzy.fuzz as fuzz
 import _sha256 as sha256
 import tqdm
 import os
+import threading
 import yaml
-import nltk
+
 p = inflect.engine()
+nlp = spacy.load('en_core_web_md')
 import logging
 logging.basicConfig(level=logging.INFO)
 
-THRESHOLD = 0.8 # Similarity threshold
+THRESHOLD = 0.6 # Similarity threshold
 
 class ChatBot:
     def __init__(self, speaker=None):
@@ -46,25 +49,26 @@ class ChatBot:
         self.fallbacks += fallbacks
         
     def similarity(self, a, b):
-        hash_a = sha256.sha256(a.encode()).hexdigest()
-        hash_b = sha256.sha256(b.encode()).hexdigest()
-        if hash_a in self.nlp_cache:
-            a = self.nlp_cache[hash_a]
-        else: a = nltk.word_tokenize(a)
-        if hash_b in self.nlp_cache:
-            b = self.nlp_cache[hash_b]
-        else: b = nltk.word_tokenize(b)
-        self.nlp_cache[hash_a] = a
-        self.nlp_cache[hash_b] = b
-        return nltk.jaccard_distance(set(a), set(b))
+        hashes = [sha256.sha256(a.encode()).hexdigest(), sha256.sha256(b.encode()).hexdigest()]
+        if not hashes[0] in self.cache:
+            a = nlp(a)
+            self.nlp_cache[hashes[0]] = a
+        else:
+            a = self.cache[hashes[0]]
+        if not hashes[1] in self.cache:
+            b = nlp(b)
+            self.nlp_cache[hashes[1]] = b
+        else:
+            b = self.cache[hashes[1]]
+        return a.similarity(b) + self.fuzz_ratio(a, b) / 100
     
-    def similarity_dirty(self, a, b):
+    def calculate_similarity_dirty(self, a, b):
         return self.fuzz_ratio(a, b) / 100
     
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
         for utterance in conversation_entry:
-            similarity_score = self.similarity_dirty(query, utterance)
+            similarity_score = self.calculate_similarity_dirty(query, utterance)
             # TODO: Make nlp similarity better
             similarity_scores.append(similarity_score)
         return similarity_scores
