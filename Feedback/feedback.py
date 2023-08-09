@@ -34,10 +34,9 @@ while True:
     sleep(1/12)
     try:
         faces = requests.get("http://localhost:5000/faces").json()
-        print(faces)
         for face in faces:
             if len(faces[face]["seen"]) >= 2:
-                print(face + ", Please give your valuable feedback")
+                print("Asking for feedback from " + face)
                 askForFeedback(face)
     except KeyboardInterrupt:
         break
