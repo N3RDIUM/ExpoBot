@@ -52,6 +52,7 @@ import sys
 import os
 
 subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "feedback.py")])
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "transcribe_bg.py")])
     
 while True:
     ret, frame = cap.read()
