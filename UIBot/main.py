@@ -89,7 +89,8 @@ amplitude_samples = []
 amplitude_samples_large = []
 _amplitude_samples = []
 smooth_amplitude = 0
-downscale = 2
+downscale = 4
+glHint(GL_POINT_SMOOTH_HINT, GL_NICEST)
 dots = np.zeros((100 // downscale, 50 // downscale, 1))
 dot_vbo = glGenBuffers(1)
 dot_vbo_data = []
@@ -123,7 +124,7 @@ while not glfw.window_should_close(window):
             _amplitude_samples.append(server.data["amplitude"])
             if len(amplitude_samples) > 32:
                 amplitude_samples.pop(0)
-            if len(_amplitude_samples) > 8:
+            if len(_amplitude_samples) > 64:
                 _amplitude_samples.pop(0)
             smooth_amplitude = sum(_amplitude_samples) / len(_amplitude_samples)
             amplitude_samples.append(smooth_amplitude)
@@ -160,7 +161,9 @@ while not glfw.window_should_close(window):
     )
     # player.update(window)
     if server:
-        _frame += smooth_amplitude / 32
+        try:
+            _frame += 1 + abs(smooth_amplitude - sum(amplitude_samples_large) / len(amplitude_samples_large)) / 32
+        except: _frame += 1
         sphere((0, 0, -10), (smooth_amplitude + noise.pnoise1(_frame / 200 - 400)*50) / 1024 + 0.24, (
             min(1 - (noise.pnoise1(_frame / 100) + frames_listening / 60), 1),
             min(1 - (noise.pnoise1(_frame / 100-200) + frames_listening / 60), 1),
@@ -200,7 +203,7 @@ while not glfw.window_should_close(window):
     for i in range(len(dots)):
         for j in range(len(dots[i])):
             # Update dot sizes according to amplitude and noise
-            dots[i][j][0] = (getsample(amplitude_samples_large, i, j) * 8 + abs(noise.pnoise1((_frame - i*j)/100)) * 20) + 0.24
+            dots[i][j][0] = (getsample(amplitude_samples_large, i, j) * 32 + abs(noise.pnoise1((_frame - i*j)/512)) * 50) + 0.1
             # Update dot colors according to noise
             color = (
                 min(1 - (noise.pnoise1((_frame - i*j) / 100-100) + frames_listening / 60), 1),
