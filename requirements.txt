@@ -16,3 +16,4 @@ face-recognition
 pyopengl
 glfw
 noise
+googletrans
