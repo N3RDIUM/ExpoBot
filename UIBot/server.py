@@ -1,6 +1,11 @@
 import socket
 import threading
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
 import json
+PORT = int(json.load(open("config.json"))["PORT"])
 
 class Server:
     def __init__(self):
@@ -19,7 +24,7 @@ class Server:
         
     def run(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(("localhost", 3030))
+        self.socket.bind(("localhost", PORT))
         self.initialized = True
         self.socket.listen(1)
         self.client, self.address = self.socket.accept()

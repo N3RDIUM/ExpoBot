@@ -8,6 +8,8 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
+import json
+PORT = int(json.load(open("config.json"))["PORT"])
 
 logging.log(logging.INFO, "[MAIN] Importing modules...")
 if not DEV:
@@ -33,7 +35,7 @@ if not DEV:
     
     logging.log(logging.INFO, "[MAIN] Connecting to UI...")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("localhost", 3030))
+    sock.connect(("localhost", PORT))
     comms = ServerComms(sock)
     logging.log(logging.INFO, "[MAIN] Connected to UI!")
 
