@@ -11,7 +11,30 @@ p = inflect.engine()
 import logging
 logging.basicConfig(level=logging.INFO)
 
-THRESHOLD = 0.6 # Similarity threshold
+THRESHOLD = 0.8 # Similarity threshold
+
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
+import json
+OPENAI_API_KEY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json")))["OPENAI_API_KEY"]
+
+import openai
+openai.api_key = OPENAI_API_KEY
+
+def get_response(query, engine="ada"):
+    response = openai.Completion.create(
+        engine=engine,
+        prompt=query,
+        max_tokens=150,
+        temperature=0.9,
+        top_p=1,
+        frequency_penalty=0.0,
+        presence_penalty=0.6,
+        stop=["\n", " Human:", " AI:"]
+    )
+    return response["choices"][0]["text"]
 
 class ChatBot:
     def __init__(self, speaker=None):
@@ -89,7 +112,10 @@ class ChatBot:
             logging.log(logging.INFO, f"[CHAT] Max found to be {max_similarity} at index {max_similarity_index}")
             return self.conversation_data[max_similarity_index[0]][max_similarity_index[1] + 1]
         except:
-            return self.random_fallback()
+            try:
+                return get_response(query)
+            except:
+                return self.random_fallback()
         
     def random_fallback(self):
         logging.log(logging.INFO, "[CHAT] Random fallback!")

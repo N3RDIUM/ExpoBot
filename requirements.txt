@@ -17,3 +17,4 @@ pyopengl
 glfw
 noise
 googletrans
+openai
