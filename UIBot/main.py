@@ -92,6 +92,8 @@ smooth_amplitude = 0
 downscale = 4
 glEnable(GL_POINT_SMOOTH)
 glHint(GL_POINT_SMOOTH_HINT, GL_NICEST)
+glEnable(GL_BLEND)
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 dots = np.zeros((100 // downscale, 50 // downscale, 1))
 dot_vbo = glGenBuffers(1)
 dot_vbo_data = []
