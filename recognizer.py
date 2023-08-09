@@ -28,3 +28,12 @@ class Recognizer():
         except sr.UnknownValueError:
             logging.log(logging.INFO, "[RECOGNIZER] Google Speech Recognition could not understand audio!")
             return ""
+    
+    def record_and_save(self, filename):
+        with self.m as source:
+            self.r.adjust_for_ambient_noise(source)
+            logging.log(logging.INFO, "[RECOGNIZER] Listening...")
+            audio = self.r.listen(source)
+        with open(filename, "wb") as f:
+            f.write(audio.get_wav_data())
+        return filename

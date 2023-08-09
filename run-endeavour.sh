@@ -10,8 +10,11 @@ fi
 if [ ! -d "feedback_recordings" ]; then
   mkdir feedback_recordings
 fi
-# If the "Feedback/feedbacks.csv" file doesn't exist, create it
-if [ ! -f "Feedback/feedbacks.csv" ]; then
+# If the "feedbacks.csv" file doesn't exist, create it
+if [ ! -f "feedbacks.json" ]; then
+  echo "id,feedback\n" > Feedback/feedbacks.csv
+fi
+if [ ! -f "feedback_recordings.json" ]; then
   echo "id,feedback\n" > Feedback/feedbacks.csv
 fi
 # If the "tts_cache" folder doesn't exist, create it

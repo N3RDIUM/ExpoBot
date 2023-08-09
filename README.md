@@ -22,28 +22,13 @@ WIP [readme]
 ## How to use
 Just open a terminal. Clone this repo, and `cd` into it.
 
-Then, install the requirements:
+Then, install the requirements and run (script for arch/endeavourOS):
 
-```python -m pip install -r requirements.txt```
 
-### Running the bot
-To run the bot, run:
-
-```
-python UIBot/main.py
-```
-
-### Running the feedback system
-To run the feedback system, run:
-
-```
-python Feedback/facerec.py
-```
-
-Then, open up another terminal, and run:
-
-```
-python Feedback/main.py
+```bash
+python -m pip install -r requirements.txt
+chmod +x run-endeavour.sh
+./run-endeavour.sh
 ```
 
 ## How to contribute
