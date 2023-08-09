@@ -2,11 +2,12 @@
 import os
 import shutil
 import playsound
-from TTS.api import TTS
 import gtts
 import playsound
 import _sha256
 OLD_HW = False
+if not OLD_HW:
+    from TTS.api import TTS
 
 import logging
 logging.basicConfig(level=logging.INFO)
