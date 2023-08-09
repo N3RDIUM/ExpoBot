@@ -1,6 +1,6 @@
 import logging
 logging.basicConfig(level=logging.INFO)
-DEV = False
+DEV = True
 
 import os
 import sys

@@ -7,11 +7,6 @@ import tqdm
 import os
 import yaml
 import nltk
-from nltk.corpus import stopwords
-
-# For sentence similarity
-nltk.download('all', download_dir="./nltk_data")
-sw = stopwords.words("english")
 p = inflect.engine()
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -69,7 +64,7 @@ class ChatBot:
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
         for utterance in conversation_entry:
-            similarity_score = self.similarity(query, utterance)
+            similarity_score = self.similarity_dirty(query, utterance)
             # TODO: Make nlp similarity better
             similarity_scores.append(similarity_score)
         return similarity_scores
