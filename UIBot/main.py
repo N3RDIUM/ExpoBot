@@ -10,7 +10,7 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
-subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "Chatbot/main.py")])
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "../Chatbot/main.py")])
 
 from server import Server
 from player import Player
