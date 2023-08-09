@@ -113,8 +113,10 @@ class ChatBot:
             return self.conversation_data[max_similarity_index[0]][max_similarity_index[1] + 1]
         except:
             try:
+                logging.log(logging.INFO, "[CHAT] No matches found. Trying ChatGPT...")
                 return get_response(query)
             except:
+                logging.log(logging.INFO, "[CHAT] ChatGPT failed. Using random fallback...")
                 return self.random_fallback()
         
     def random_fallback(self):
