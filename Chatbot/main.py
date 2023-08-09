@@ -1,6 +1,9 @@
 import logging
 logging.basicConfig(level=logging.INFO)
 DEV = False
+ONLINE_SPEECH = False # online caching
+# for older hardware, set this to True
+# TODO: Also cache fallbacks
 
 import os
 import sys

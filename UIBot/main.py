@@ -217,8 +217,8 @@ while not glfw.window_should_close(window):
             x = i * 2 - len(dots) + 1
             y = j * 2 - len(dots[i]) + 1
             point((
-                x * downscale - noise.pnoise1((_frame - i*j) / 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 200) * 2, 
-                y * downscale - noise.pnoise1((_frame - i*j) / 100 + 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 300) * 2,
+                x * downscale - noise.pnoise1((_frame - i*j) / 100) * 2 + noise.pnoise1((_frame + i*j) / 200 + 200) * 2, 
+                y * downscale - noise.pnoise1((_frame - i*j) / 100 + 100) * 2 + noise.pnoise1((_frame + i*j) / 200 + 300) * 2,
             -100), dots[i][j][0], color=color)
     # Keep running
     glfw.poll_events()
