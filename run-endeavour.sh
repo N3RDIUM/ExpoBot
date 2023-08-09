@@ -16,7 +16,7 @@ if [ ! -f "feedbacks.json" ]; then
 fi
 # If the "config.json" file doesn't exist, create it
 if [ ! -f "config.json" ]; then
-  echo "{\"OLD_HARDWARE\":0,\"PORT\":8080, \"CAMERA\":0}" > feedbacks.json
+  echo "{\"OLD_HARDWARE\":0,\"PORT\":8080, \"CAMERA\":0,\"OPENAI_API_KEY\":""}" > feedbacks.json
 fi
 # If the "tts_cache" folder doesn't exist, create it
 if [ ! -d "tts_cache" ]; then
