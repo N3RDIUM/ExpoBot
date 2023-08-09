@@ -206,7 +206,7 @@ while not glfw.window_should_close(window):
     for i in range(len(dots)):
         for j in range(len(dots[i])):
             # Update dot sizes according to amplitude and noise
-            dots[i][j][0] = (getsample(amplitude_samples_large, i, j) * 32 + abs(noise.pnoise1((_frame - i*j)/512)) * 50) + 0.1
+            dots[i][j][0] = (getsample(amplitude_samples_large, i, j) * 3200 + abs(noise.pnoise1((_frame - i*j)/512)) * 50) + 0.1
             # Update dot colors according to noise
             color = (
                 min(1 - (noise.pnoise1((_frame - i*j) / 100-100) + frames_listening / 60), 1),
