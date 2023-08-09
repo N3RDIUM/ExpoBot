@@ -1,6 +1,7 @@
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
+OLD_HW = False 
 
 import requests
 from recognizer import Recognizer
@@ -12,7 +13,7 @@ from time import sleep
 
 nltk.download('vader_lexicon')
 
-speaker = Speaker()
+speaker = Speaker(OLD_HW)
 speaker.initialize()
 speaker.speak_gtts("Hello, I am your feedback assistant")
 
