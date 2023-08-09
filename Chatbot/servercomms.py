@@ -29,14 +29,10 @@ class ServerComms:
         time.sleep(1)
         pyaudio_instance = pyaudio.PyAudio()
         time.sleep(1)
-        pyaudio_out_instance = pyaudio.PyAudio()
-        time.sleep(1)
         self.lock.release()
         stream = pyaudio_instance.open(format=pyaudio.paInt16, channels=1, rate=44100, input=True, frames_per_buffer=1024)
-        # Read from the speaker output
-        stream_out = pyaudio_out_instance.open(format=pyaudio.paInt16, channels=1, rate=44100, output=True, frames_per_buffer=1024)
         while True:
-            self.data["amplitude"] = self.get_amplitude(stream) + self.get_amplitude(stream_out)
+            self.data["amplitude"] = self.get_amplitude(stream)
             self.update(self.data)
             
     def get_amplitude(self, stream):
