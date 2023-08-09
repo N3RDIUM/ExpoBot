@@ -56,7 +56,7 @@ subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "trans
     
 while True:
     ret, frame = cap.read()
-    downscale_factor = 4
+    downscale_factor = 1
     downscaled_frame = cv2.resize(frame, (0, 0), fx=1/downscale_factor, fy=1/downscale_factor)
     if ret:        
         face_locations = fr.face_locations(downscaled_frame, model="hog")
