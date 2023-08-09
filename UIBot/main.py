@@ -89,7 +89,11 @@ amplitude_samples = []
 amplitude_samples_large = []
 _amplitude_samples = []
 smooth_amplitude = 0
-dots = np.zeros((100, 50, 1))
+downscale = 2
+dots = np.zeros((100 // downscale, 50 // downscale, 1))
+dot_vbo = glGenBuffers(1)
+dot_vbo_data = []
+# Persistently map the buffer
 frames_listening = 0
 
 # Main loop
@@ -207,8 +211,8 @@ while not glfw.window_should_close(window):
             x = i * 2 - len(dots) + 1
             y = j * 2 - len(dots[i]) + 1
             point((
-                x - noise.pnoise1((_frame - i*j) / 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 200) * 2, 
-                y - noise.pnoise1((_frame - i*j) / 100 + 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 300) * 2,
+                x * downscale - noise.pnoise1((_frame - i*j) / 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 200) * 2, 
+                y * downscale - noise.pnoise1((_frame - i*j) / 100 + 100) * 0.5 + noise.pnoise1((_frame + i*j) / 200 + 300) * 2,
             -100), dots[i][j][0], color=color)
     # Keep running
     glfw.poll_events()
