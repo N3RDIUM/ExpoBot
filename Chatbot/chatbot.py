@@ -23,9 +23,12 @@ if not "USELOCAL" in json.load(open(os.path.join(os.path.dirname(os.path.abspath
     logging.log(logging.INFO, "[CHAT] Using OpenAI API")
     OPENAI_API_KEY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json")))["OPENAI_API_KEY"]
     openai.api_key = OPENAI_API_KEY
+    engine = "ada"
 else:
     logging.log(logging.INFO, "[CHAT] FAILED to use OpenAI API, Using local OpenAI API")
+    openai.api_key = None
     openai.api_base = "http://localhost:5000/v1"
+    engine = "ggml-gpt4all-j"
 
 def get_response(query, engine="ada"):
     response = openai.Completion.create(
@@ -39,7 +42,6 @@ def get_response(query, engine="ada"):
         stop=["\n", " Human:", " AI:"]
     )
     return str(response["choices"][0]["text"])
-get_response("Hello, how are you?")
 
 class ChatBot:
     def __init__(self, speaker=None):
