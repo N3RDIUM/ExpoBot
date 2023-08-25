@@ -18,3 +18,4 @@ glfw
 noise
 googletrans
 openai
+elevenlabs
