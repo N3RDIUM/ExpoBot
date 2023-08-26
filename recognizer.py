@@ -8,6 +8,7 @@ class Recognizer():
         logging.log(logging.INFO, "[RECOGNIZER] Recognizer __init__")
         self.r = sr.Recognizer()
         self.m = sr.Microphone()
+        # self.r.pause_threshold = 2
         logging.log(logging.INFO, "[RECOGNIZER] Recognizer and microphone initialized!")
         self.initialize()
         logging.log(logging.INFO, "[RECOGNIZER] Recognizer initialized!")
@@ -27,7 +28,7 @@ class Recognizer():
             return self.r.recognize_google(audio, language="en-IN")
         except sr.UnknownValueError:
             logging.log(logging.INFO, "[RECOGNIZER] Google Speech Recognition could not understand audio!")
-            return ""
+            return self.recognize_from_mic()
     
     def record_and_save(self, filename):
         with self.m as source:

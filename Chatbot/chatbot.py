@@ -122,8 +122,8 @@ class ChatBot:
             try:
                 logging.log(logging.INFO, "[CHAT] No matches found. Trying ChatGPT...")
                 return get_response(query)
-            except:
-                logging.log(logging.INFO, "[CHAT] ChatGPT failed. Using random fallback...")
+            except Exception as e:
+                logging.log(logging.INFO, f"[CHAT] ChatGPT failed with {e}. Using random fallback...")
                 return self.random_fallback()
         
     def random_fallback(self):
