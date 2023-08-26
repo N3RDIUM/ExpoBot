@@ -32,7 +32,7 @@ chmod +x run-endeavour.sh
 ```
 
 ## How to contribute
-If you want to contribute, just fork this repo, and make a pull request. We will review it, and if it is good, we will merge it.
+If you want to contribute, just fork this repo, and make a pull request. Leave the rest to us.
 
 ## Roadmap
 - [x] Basic bot functionality

@@ -43,6 +43,7 @@ class Speaker():
         if not self.old_hw:
             logging.log(logging.INFO, "[SPEAKER] TTS Models: "+str(TTS.list_models()))
             logging.log(logging.INFO, "[SPEAKER] Loading TTS model...")
+            print("Available TTS models: "+str(TTS.list_models()))
             self.tts = TTS(TTS.list_models()[model], progress_bar=True)
         else:
             self.tts = None
@@ -58,8 +59,8 @@ class Speaker():
         if self.tts:
             self.tts.tts_to_file(
                 text=text,
-                file_path=filename,
-                emotion="Confident",
+                speaker_wav="jarvis.mp3",
+                file_path=filename
             )
         else:
             gtts.gTTS(text=text, lang="en").save(filename)
@@ -95,3 +96,4 @@ class Speaker():
         shutil.move(new_filename, self.CACHE_PATH)
         if not quiet:
             logging.log(logging.INFO, "[SPEAKER] Moved file "+filename+" to "+new_filename)
+            
