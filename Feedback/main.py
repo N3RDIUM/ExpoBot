@@ -11,15 +11,20 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
 CAMERA = int(json.load(open("config.json"))["CAMERA"])
 
 # Live face recognition
-cap = cv2.VideoCapture()
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # Face data: Last seen
 face_data = {}
+special_greet = []
+greeted = []
 def update_facedata(data):
     global face_data
     face_data.update(data)
+def update_specialgreet(data):
+    global special_greet
+    special_greet.append(data)
 
 # Load known faces
 import os
@@ -47,7 +52,14 @@ def start_server():
             return flask.jsonify({"success": True})
         else:
             return flask.jsonify({"success": False})
+    @app.route("/sgget/")
+    def special_greet_get():
+        greets = special_greet.copy()
+        special_greet.clear()
+        greeted.extend(greets)
+        return flask.jsonify({"data": greets})
     app.run(port=5000)
+    
 
 thread = threading.Thread(target=start_server)
 thread.start()
@@ -86,6 +98,11 @@ while True:
             else:
                 # Find the name of the face
                 name = list(faces.keys())[matches.index(True)]
+                # Special greetings
+                for special in ["Creator", "Creator2"]:
+                    if name == special and name not in greeted:
+                        update_specialgreet(name)
+                        greeted.append(name)
                 # Mark left eye
                 face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="large")
                 for face_landmarks in face_landmarks_list:

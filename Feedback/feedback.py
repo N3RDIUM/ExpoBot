@@ -39,5 +39,9 @@ while True:
             if len(faces[face]["seen"]) >= 2:
                 print("Asking for feedback from " + face)
                 askForFeedback(face)
+        specialgreet = requests.get("http://localhost:5000/sgget").json()
+        for greet in specialgreet["data"]:
+            if "Creator" in greet:
+                speaker.speak_offline("Hello, my creator. This is a dummy speech for special guests to the fair.")
     except KeyboardInterrupt:
         break

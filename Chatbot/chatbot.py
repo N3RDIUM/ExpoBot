@@ -235,7 +235,7 @@ class ChatBot:
         for floor in floors:
             _ = [[
                 qs[i].format(floor), 
-                "The projects in the {} floor are: ".format(floor) + ", ".join(floors[floor.lower().strip()][:-1]) + " and " + floors[floor.lower().strip()][-1] + ".",
+                "The projects in the {} floor are: ".format(self.numerify(floor)) + ", ".join(floors[floor.lower().strip()][:-1]) + " and " + floors[floor.lower().strip()][-1] + ".",
             ] for i in range(len(qs))]
             for i in range(len(_)):
                 data.append(_[i])

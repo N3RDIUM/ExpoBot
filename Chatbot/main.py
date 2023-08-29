@@ -25,7 +25,7 @@ if not DEV:
     s.initialize()
 
     logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")
-    s.speak_gtts("Hello. Welcome to the CIS science fair!")
+    s.speak_gtts("Hello. Welcome to Anveshan!")
     s.speak_offline("Testing offline speech synthesis.")
     logging.log(logging.INFO, "[MAIN] Speaker test complete!")
 

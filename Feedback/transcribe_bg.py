@@ -36,3 +36,4 @@ while True:
         lng = transcribe_all_languages(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../", "feedback_recordings", file))
         update_feedbacks({file.split(".")[0]: lng})
         os.remove(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../", "feedback_recordings", file))
+        print("Transcribed " + file + " as " + str(lng))
