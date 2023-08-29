@@ -5,12 +5,8 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
 import requests
 from recognizer import Recognizer
 from speaker import Speaker
-from nltk.sentiment import SentimentIntensityAnalyzer
-import nltk
 from googletrans import Translator
 from time import sleep
-
-nltk.download('vader_lexicon')
 
 speaker = Speaker()
 speaker.initialize()
@@ -18,8 +14,6 @@ speaker.speak_gtts("Hello World. Welcome to Anveshan!")
 
 recognizer = Recognizer()
 recognizer.initialize()
-
-analyzer = SentimentIntensityAnalyzer()
 
 def toEnglish(text):
     translator = Translator()
