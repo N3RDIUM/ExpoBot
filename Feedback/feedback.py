@@ -14,7 +14,7 @@ nltk.download('vader_lexicon')
 
 speaker = Speaker()
 speaker.initialize()
-speaker.speak_gtts("Hello, I am your feedback assistant")
+speaker.speak_gtts("Hello World. Welcome to Anveshan!")
 
 recognizer = Recognizer()
 recognizer.initialize()
@@ -43,5 +43,7 @@ while True:
         for greet in specialgreet["data"]:
             if "Creator" in greet:
                 speaker.speak_offline("Hello, my creator. This is a dummy speech for special guests to the fair.")
+            if "Mentor" in greet:
+                speaker.speak_offline("Hello, project mentor. This is a dummy speech for special guests to the fair.")
     except KeyboardInterrupt:
         break

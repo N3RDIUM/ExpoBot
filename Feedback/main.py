@@ -73,7 +73,7 @@ subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "trans
     
 while True:
     ret, frame = cap.read()
-    downscale_factor = 1
+    downscale_factor = 2
     downscaled_frame = cv2.resize(frame, (0, 0), fx=1/downscale_factor, fy=1/downscale_factor)
     if ret:        
         face_locations = fr.face_locations(downscaled_frame, model="hog")
@@ -99,7 +99,7 @@ while True:
                 # Find the name of the face
                 name = list(faces.keys())[matches.index(True)]
                 # Special greetings
-                for special in ["Creator", "Creator2"]:
+                for special in ["Creator", "Creator2", "Creator3", "Mentor"]:
                     if name == special and name not in greeted:
                         update_specialgreet(name)
                         greeted.append(name)
