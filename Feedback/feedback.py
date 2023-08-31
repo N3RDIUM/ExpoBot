@@ -31,24 +31,24 @@ while True:
                 askForFeedback(face)
         specialgreet = requests.get("http://localhost:5000/sgget").json()
         for greet in specialgreet["data"]:
-            if "Creator" in greet:
-                if greet == "Creator":
-                    speaker.speak_gtts("Arre bhai creator, kaisa hai?")
-                elif greet == "Creator2":
-                    speaker.speak_gtts("Arre Sahil bhai, kaisa hai?")
-                elif greet == "Creator3":
-                    speaker.speak_gtts("Arre Prathmesh bhai, kaisa hai?")
+            # if "Creator" in greet:
+                # if greet == "Creator":
+                #     speaker.speak_gtts("Arre bhai creator, kaisa hai?")
+                # elif greet == "Creator2":
+                #     speaker.speak_gtts("Arre Sahil bhai, kaisa hai?")
+                # elif greet == "Creator3":
+                #     speaker.speak_gtts("Arre Prathmesh bhai, kaisa hai?")
             if "Mentor" in greet:
-                speaker.speak_gtts("Hello, project mentor. This is a dummy speech for special guests to the fair.")
+                speaker.speak_gtts("Good Morning project mentor. Welcome to Anveshan 2023. We are greatful for your presence, ma\'am.")
             if "Principal" in greet:
-                speaker.speak_gtts("Hello, principal ma\'am. This is a dummy speech for special guests to the fair.")
+                speaker.speak_gtts("Good Morning principal ma\'am. Welcome to Anveshan 2023. We are greatful for your presence, ma\'am.")
             if "AbhasSir" in greet:
-                speaker.speak_gtts("Hello, Abhas sir. This is a dummy speech for special guests to the fair.")
+                speaker.speak_gtts("Good Morning Abhas sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
             if "PritiMaam" in greet:
-                speaker.speak_gtts("Hello, Priti ma\'am. This is a dummy speech for special guests to the fair.")
+                speaker.speak_gtts("Good Morning Priti ma\'am. Welcome to Anveshan 2023. We are greatful for your presence, ma\'am.")
             if "ShreyasSir" in greet:
-                speaker.speak_gtts("Hello, Shreyas sir. This is a dummy speech for special guests to the fair.")
+                speaker.speak_gtts("Good Morning Shreyas sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
             if "MthSir" in greet:
-                speaker.speak_gtts("Hello, Mth sir. This is a dummy speech for special guests to the fair.")
+                speaker.speak_gtts("Good Morning Mth sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
     except KeyboardInterrupt:
         break
