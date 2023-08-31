@@ -30,18 +30,16 @@ else:
     openai.api_base = "http://localhost:5000/v1"
     engine = "ggml-gpt4all-j"
 
-def get_response(query, engine="ada"):
-    response = openai.Completion.create(
-        engine=engine,
-        prompt=query,
-        max_tokens=150,
-        temperature=0.9,
-        top_p=1,
-        frequency_penalty=0.0,
-        presence_penalty=0.6,
-        stop=["\n", " Human:", " AI:"]
+messages = [ {"role": "system", "content": "You are a intelligent assistant. Speak in English only. Give short responses, enough to be spoken in 5 to 8 senconds. Do not give responses like \"as an ai, i cannot ...\" and respond like a real human. Have opinions and other stuffs that humans have, so that humans will feel more comfortable in talking to you. Never mention that you're an AI, and that you cannot do something. If you dont know an answer, respond sarcastically. Respond in short sentences, and not more than 2 sentences. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. "} ]
+def get_response(message):
+    global messages
+    messages.append(
+        {"role": "user", "content": message},
     )
-    return str(response["choices"][0]["text"])
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo", messages=messages
+    )
+    return str(response.choices[0].message.content)
 
 class ChatBot:
     def __init__(self, speaker=None):

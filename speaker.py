@@ -3,10 +3,12 @@ import os
 import shutil
 import playsound
 import gtts
-import playsound
 import _sha256
 import json
+import elevenlabs
+from elevenlabs import generate, stream
 OLD_HW = bool(json.load(open("config.json"))["OLD_HARDWARE"])
+ELEVEN_API_KEY = json.load(open("config.json"))["ELEVEN_API_KEY"]
 if not OLD_HW:
     from TTS.api import TTS
 else:
@@ -17,6 +19,13 @@ logging.basicConfig(level=logging.INFO)
 
 # Mute TTS logs
 logging.getLogger('TTS').setLevel(logging.WARNING)
+
+# init elevenlabs
+elevenlabs.set_api_key(ELEVEN_API_KEY)
+voices = elevenlabs.voices()
+print("Available voices:")
+for voice in voices:
+    print(voice.name)
 
 class Speaker():
     def __init__(self):
@@ -67,6 +76,14 @@ class Speaker():
         playsound.playsound(filename)
         self.move2cache(filename, text)
         self.spoken += 1
+        
+    def speak_elevenlabs(self, text):
+        audio_stream = generate(
+            text,
+            stream=True,
+            voice=voices[0],
+        )
+        stream(audio_stream)
         
     def create_offline_cache(self, text, quiet=False):
         self.cache = os.listdir(self.CACHE_PATH)

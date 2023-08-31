@@ -25,8 +25,9 @@ if not DEV:
     s.initialize()
 
     logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")
-    s.speak_gtts("Hello. Welcome to Anveshan!")
+    s.speak_gtts("Hello. Welcome to Anveshan! I am JARVIS!")
     s.speak_offline("Testing offline speech synthesis.")
+    s.speak_elevenlabs("Testing eleven labs speech synthesis.")
     logging.log(logging.INFO, "[MAIN] Speaker test complete!")
 
     logging.log(logging.INFO, "[MAIN] Initializing speech recognition...")
@@ -75,10 +76,11 @@ chat.train([[
 
 thanks = [
     "Thank you",
-    "Thanks",
+    "Thanks", 
+
     "Thanks a lot",
     "Thank you very much",
-    "Thank you so much",
+    "Thank you so much", 
 ]
 chat.train([[
     thanks[i],
@@ -130,7 +132,7 @@ while True:
                 if comms:
                     comms.update({"speaking": "bot", "speaking-text": ans})
                 logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                s.speak_offline(ans)
+                s.speak_elevenlabs(ans)
                 if comms:
                     comms.update({"speaking": "no-one", "speaking-text": ""})
             except ValueError: # chatbot answered with nothing
