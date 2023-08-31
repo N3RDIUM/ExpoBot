@@ -168,3 +168,4 @@ feedbacks.json
 nltk_data
 config.json
 LocalAI
+*.lock
