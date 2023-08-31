@@ -134,7 +134,7 @@ logging.log(logging.INFO, "[MAIN] Training complete! Loading previous cache...")
 chat.load_cache()
 
 logging.log(logging.INFO, "[MAIN] Saving speech cache...")
-chat.create_speech_cache()
+chat.create_offline_cache()
 
 BLACKLISTED_SONGS = [
     "bts",
@@ -251,7 +251,7 @@ def process(response):
                     if comms:
                         comms.update({"speaking": "bot", "speaking-text": "Sorry, you are not authorised to play that song."})
                     logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                    s.speak_offline("Okay, playing "+response[5:]+".")
+                    s.speak_gtts("Okay, playing "+response[5:]+".")
                     if comms:
                         comms.update({"speaking": "no-one", "speaking-text": ""})
                 except ValueError:
@@ -273,7 +273,7 @@ def process(response):
                         if comms:
                             comms.update({"speaking": "bot", "speaking-text": "Sorry, you are not authorised to play that song."})
                         logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                        s.speak_offline("You are not authorised to play BTS songs in this fair.")
+                        s.speak_gtts("You are not authorised to play BTS songs in this fair.")
                         if comms:
                             comms.update({"speaking": "no-one", "speaking-text": ""})
                     except ValueError:
@@ -289,7 +289,7 @@ def process(response):
                     if comms:
                         comms.update({"speaking": "bot", "speaking-text": "You are not authorised to play BTS songs in this fair."})
                     logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                    s.speak_offline("You are not authorised to play BTS songs in this fair.")
+                    s.speak_gtts("You are not authorised to play BTS songs in this fair.")
                     if comms:
                         comms.update({"speaking": "no-one", "speaking-text": ""})
                 except ValueError:
@@ -344,7 +344,7 @@ while True:
                     if comms:
                         comms.update({"speaking": "bot", "speaking-text": ans})
                     logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                    s.speak_offline(ans)
+                    s.speak_gtts(ans)
                     if comms:
                         comms.update({"speaking": "no-one", "speaking-text": ""})
                 except ValueError: # chatbot answered with nothing

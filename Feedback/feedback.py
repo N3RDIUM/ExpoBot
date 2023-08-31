@@ -16,10 +16,10 @@ recognizer = Recognizer()
 recognizer.initialize()
 
 def askForFeedback(name):
-    speaker.speak_offline("Hello, Please give your valuable feedback")
+    speaker.speak_gtts("Hello, Please give your valuable feedback")
     recognizer.record_and_save("feedback_recordings/" + name + ".wav")
     requests.get("http://localhost:5000/feedback-given/" + name)
-    speaker.speak_offline("Thank you for your feedback!")
+    speaker.speak_gtts("Thank you for your feedback!")
 
 while True:
     sleep(1/12)

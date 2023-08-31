@@ -70,7 +70,7 @@ class ChatBot:
         self.conversation_data += conversation_data
         self.save_hash = sha256.sha256(str(conversation_data).encode()).hexdigest()
         
-    def create_speech_cache(self):
+    def create_offline_cache(self):
         logging.log(logging.INFO, "[CHAT] Creating text to speech cache...")
         for data in tqdm.tqdm(self.conversation_data, desc="Creating tts cache for train"):
             for utterance in data:

@@ -87,8 +87,20 @@ class Speaker():
                 voice=voices[0],
             )
             stream(audio_stream)
-        
-    def create_offline_cache(self, text, quiet=False):
+    
+    def speak_offline_cache(self, text):
+        self.cache = os.listdir(self.CACHE_PATH)
+        if _sha256.sha256(text.encode()).hexdigest()+".mp3" in self.cache:
+            logging.log(logging.INFO, "[SPEAKER] Speaking from cache...")
+            playsound.playsound(self.CACHE_PATH+_sha256.sha256(text.encode()).hexdigest()+".mp3")
+            return
+        filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
+        gtts.gTTS(text=text, lang="en").save(filename)
+        playsound.playsound(filename)
+        self.move2cache(filename, text)
+        self.spoken += 1
+    
+    def create_offline_cache_tts(self, text, quiet=False):
         self.cache = os.listdir(self.CACHE_PATH)
         if not _sha256.sha256(text.encode()).hexdigest()+".mp3" in self.cache:
             filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
