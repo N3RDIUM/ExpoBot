@@ -2,6 +2,7 @@ import random
 import json
 import inflect
 import fuzzywuzzy.fuzz as fuzz
+from sentence_transformers import SentenceTransformer, util
 import _sha256 as sha256
 import tqdm
 import yaml
@@ -79,10 +80,18 @@ class ChatBot:
     def calculate_similarity_dirty(self, a, b):
         return self.fuzz_ratio(a, b) / 100
     
+    def calculate_similarity_better(self, a, b):
+        # Use sentence transformers
+        if not a in self.nlp_cache:
+            self.nlp_cache[a] = self.sentence_transformer.encode(a)
+        if not b in self.nlp_cache:
+            self.nlp_cache[b] = self.sentence_transformer.encode(b)
+        return util.pytorch_cos_sim(self.nlp_cache[a], self.nlp_cache[b])[0][0]
+    
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
         for utterance in conversation_entry:
-            similarity_score = self.calculate_similarity_dirty(query, utterance)
+            similarity_score = self.calculate_similarity_better(query, utterance)
             # TODO: Make nlp similarity better
             similarity_scores.append(similarity_score)
         return similarity_scores
