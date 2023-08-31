@@ -2,6 +2,7 @@
 import logging
 logging.basicConfig(level=logging.INFO)
 import speech_recognition as sr
+from filelock import FileLock
 
 class Recognizer():
     def __init__(self):
@@ -19,16 +20,17 @@ class Recognizer():
             self.r.adjust_for_ambient_noise(source)
         
     def recognize_from_mic(self):
-        with self.m as source:
-            self.r.adjust_for_ambient_noise(source)
-            logging.log(logging.INFO, "[RECOGNIZER] Listening...")
-            audio = self.r.listen(source)
-        try:
-            logging.log(logging.INFO, "[RECOGNIZER] Recognizing with Google Speech Recognition...")
-            return self.r.recognize_google(audio, language="en-IN")
-        except sr.UnknownValueError:
-            logging.log(logging.INFO, "[RECOGNIZER] Google Speech Recognition could not understand audio!")
-            return self.recognize_from_mic()
+        with FileLock("expobot.lock"):
+            with self.m as source:
+                self.r.adjust_for_ambient_noise(source)
+                logging.log(logging.INFO, "[RECOGNIZER] Listening...")
+                audio = self.r.listen(source)
+            try:
+                logging.log(logging.INFO, "[RECOGNIZER] Recognizing with Google Speech Recognition...")
+                return self.r.recognize_google(audio, language="en-IN")
+            except sr.UnknownValueError:
+                logging.log(logging.INFO, "[RECOGNIZER] Google Speech Recognition could not understand audio!")
+                return self.recognize_from_mic()
     
     def record_and_save(self, filename):
         with self.m as source:

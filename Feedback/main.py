@@ -9,6 +9,10 @@ import os
 import json
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
 CAMERA = int(json.load(open("config.json"))["CAMERA"])
+import logging
+# Disable the flask logger
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 # Live face recognition
 cap = cv2.VideoCapture(0)

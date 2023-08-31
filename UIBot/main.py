@@ -11,6 +11,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
 subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "../Chatbot/main.py")])
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "../Feedback/main.py")])
 
 from server import Server
 from player import Player
@@ -166,7 +167,7 @@ while not glfw.window_should_close(window):
         a1 = 0
         try:
             a1 = amplitude_samples[len(amplitude_samples) // 4]
-        except: pass
+        except: pass   
         
         a2 = 0
         try:

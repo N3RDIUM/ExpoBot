@@ -7,6 +7,7 @@ import _sha256
 import json
 import elevenlabs
 from elevenlabs import generate, stream
+from filelock import FileLock
 OLD_HW = bool(json.load(open("config.json"))["OLD_HARDWARE"])
 ELEVEN_API_KEY = json.load(open("config.json"))["ELEVEN_API_KEY"]
 if not OLD_HW:
@@ -59,31 +60,33 @@ class Speaker():
         logging.log(logging.INFO, "[SPEAKER] TTS model loaded!")
 
     def speak_offline(self, text):
-        self.cache = os.listdir(self.CACHE_PATH)
-        if _sha256.sha256(text.encode()).hexdigest()+".mp3" in self.cache:
-            logging.log(logging.INFO, "[SPEAKER] Speaking from cache...")
-            playsound.playsound(self.CACHE_PATH+_sha256.sha256(text.encode()).hexdigest()+".mp3")
-            return
-        filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
-        if self.tts:
-            self.tts.tts_to_file(
-                text=text,
-                speaker_wav="jarvis.mp3",
-                file_path=filename
-            )
-        else:
-            gtts.gTTS(text=text, lang="en").save(filename)
-        playsound.playsound(filename)
-        self.move2cache(filename, text)
-        self.spoken += 1
+        with FileLock("expobot.lock"):
+            self.cache = os.listdir(self.CACHE_PATH)
+            if _sha256.sha256(text.encode()).hexdigest()+".mp3" in self.cache:
+                logging.log(logging.INFO, "[SPEAKER] Speaking from cache...")
+                playsound.playsound(self.CACHE_PATH+_sha256.sha256(text.encode()).hexdigest()+".mp3")
+                return
+            filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
+            if self.tts:
+                self.tts.tts_to_file(
+                    text=text,
+                    speaker_wav="jarvis.mp3",
+                    file_path=filename
+                )
+            else:
+                gtts.gTTS(text=text, lang="en").save(filename)
+            playsound.playsound(filename)
+            self.move2cache(filename, text)
+            self.spoken += 1
         
     def speak_elevenlabs(self, text):
-        audio_stream = generate(
-            text,
-            stream=True,
-            voice=voices[0],
-        )
-        stream(audio_stream)
+        with FileLock("expobot.lock"):
+            audio_stream = generate(
+                text,
+                stream=True,
+                voice=voices[0],
+            )
+            stream(audio_stream)
         
     def create_offline_cache(self, text, quiet=False):
         self.cache = os.listdir(self.CACHE_PATH)
@@ -101,11 +104,12 @@ class Speaker():
             self.spoken += 1
     
     def speak_gtts(self, text):
-        filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
-        gtts.gTTS(text=text, lang="en").save(filename)
-        playsound.playsound(filename)
-        os.remove(filename)
-        self.spoken += 1
+        with FileLock("expobot.lock"):
+            filename = self.SAVE_PATH+str(self.spoken)+"_.mp3"
+            gtts.gTTS(text=text, lang="en").save(filename)
+            playsound.playsound(filename)
+            os.remove(filename)
+            self.spoken += 1
     
     def move2cache(self, filename, text, quiet=False):
         new_filename = self.SAVE_PATH+_sha256.sha256(text.encode()).hexdigest()+".mp3"

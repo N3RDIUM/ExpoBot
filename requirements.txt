@@ -20,3 +20,4 @@ googletrans
 openai
 elevenlabs
 selenium
+lockfile
