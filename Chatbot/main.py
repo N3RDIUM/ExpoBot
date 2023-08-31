@@ -271,26 +271,30 @@ def process(response):
                         if comms:
                             comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
                         logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                        s.speak_offline("Sorry, you are not authorised to play BTS songs in this fair.")
+                        s.speak_offline("You are not authorised to play BTS songs in this fair.")
                         if comms:
                             comms.update({"speaking": "no-one", "speaking-text": ""})
                     except ValueError:
                         if comms:
                             comms.update({"speaking": "no-one", "speaking-text": ""})
+                # Go back to the home page
+                driver.get("https://n3rdium.dev")
                 return True
         else:
             logging.log(logging.WARNING, "[MAIN] Sorry, I don't play BTS songs.")
             if not DEV:
                 try:
                     if comms:
-                        comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
+                        comms.update({"speaking": "bot", "speaking-text": "You are not authorised to play BTS songs in this fair."})
                     logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                    s.speak_offline("Sorry, you are not authorised to play BTS songs in this fair.")
+                    s.speak_offline("You are not authorised to play BTS songs in this fair.")
                     if comms:
                         comms.update({"speaking": "no-one", "speaking-text": ""})
                 except ValueError:
                     if comms:
                         comms.update({"speaking": "no-one", "speaking-text": ""})
+            # Go back to the home page
+            driver.get("https://n3rdium.dev")
             return True
     return False
 
