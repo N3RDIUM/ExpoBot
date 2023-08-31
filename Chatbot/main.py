@@ -298,6 +298,12 @@ def process(response):
             # Go back to the home page
             driver.get("https://n3rdium.dev")
             return True
+    if "pause" in response:
+        pause()
+        return True
+    if "play" in response:
+        play()
+        return True
     return False
 
 def pause():

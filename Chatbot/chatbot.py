@@ -100,7 +100,7 @@ class ChatBot:
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
         for utterance in conversation_entry:
-            similarity_score = self.calculate_similarity_better(query, utterance)
+            similarity_score = self.calculate_similarity_dirty(query, utterance) #+ self.calculate_similarity_better(query, utterance)
             # TODO: Make nlp similarity better
             similarity_scores.append(similarity_score)
         return similarity_scores
@@ -152,7 +152,7 @@ class ChatBot:
         data = []
         
         logging.log(logging.INFO, "[CHAT] Training chatbot on categories...")
-                
+        
         # When there are more that 2 projects with the same name
         found = {}
         for project in expo_data["projects"]:
@@ -163,9 +163,156 @@ class ChatBot:
         found_exceptions = [i for i in found if found[i] > 1]
         for exception in found_exceptions:
             print(exception)
-        
-        # TODO: Work in progress
+            
+        # Questions about projects
+        for project in expo_data["projects"]:
+            # Where is project X?
+            whereis_questions = [
+                "Where is project {}?".format(project["title"]),
+                "Where is {}?".format(project["title"]),
+                "Where is {} located?".format(project["title"]),
+                "Where is {} located at?".format(project["title"]),
+                "Where is {} located in the expo?".format(project["title"]),
+                "Where can I find {}?".format(project["title"]),
+                "Where can I find {} in the expo?".format(project["title"]),
+                "Where can I find {} located?".format(project["title"]),
+                "Where can I find {} located at?".format(project["title"]),
+                "Where is the project {}?".format(project["title"]),
+                "Where is the {}?".format(project["title"]),
+                "Where is the {} located?".format(project["title"]),
+                "Where is the {} located at?".format(project["title"]),
+            ]
+            for question in whereis_questions:
+                data.append([
+                    question,
+                    "The project {} is located on the {} floor, room {}.".format(
+                        project["title"],
+                        self.numerify(project["floor"]),
+                        self.number_to_speech(project["roomNumber"])
+                    )
+                ])
+            
+            # Who made project X?
+            whois_questions = [
+                "Who made project {}?",
+                "Who made {}?",
+                "Who made {} project?",
+                "Who made the project {}?",
+                "Who made the {}?",
+                "Who made the {} project?",
+            ]
+            for question in whois_questions:
+                data.append([
+                    question,
+                    "The project {} was made by {}.".format(
+                        project["title"],
+                        self.mems2str(project["members"])
+                    )
+                ])
+                
+            # Where is student X?
+            for member in project["members"]:
+                whereis_questions = [
+                    "Where is {}?",
+                    "Where can I find {}?",
+                    "I want to meet {}",
+                ]
+                for question in whereis_questions:
+                    data.append([
+                        question.format(member),
+                        "The student {} is located on the {} floor, room {}.".format(
+                            member,
+                            self.numerify(project["floor"]),
+                            self.number_to_speech(project["roomNumber"])
+                        )
+                    ])
+                    
+            # Where is project X by student Y?
+            for member in project["members"]:
+                whereis_questions = [
+                    "Where is {}'s project?",
+                    "Where can I find {}'s project?",
+                    "{}'s project"
+                ]
+                for question in whereis_questions:
+                    data.append([
+                        question.format(member),
+                        "The project {} is located on the {} floor, room {}.".format(
+                            project["title"],
+                            self.numerify(project["floor"]),
+                            self.number_to_speech(project["roomNumber"])
+                        )
+                    ])
+
+            # Which class made project X?
+            if len(project["class"]) > 1:
+                whichclass_questions = [
+                    "Which class made project {}?",
+                    "Which class made {}?",
+                    "Which class made {} project?",
+                    "Which class made the project {}?",
+                    "Which class made the {}?",
+                    "Which class made the {} project?",
+                ]
+                for question in whichclass_questions:
+                    data.append([
+                        question,
+                        "The project {} was made by {}.".format(
+                            project["title"],
+                            self.number_to_speech(project["class"].split(" ")[0]) + " " + project["class"].split(" ")[1]
+                        )
+                    ])
+                    
+            # Who is X?
+            for member in project["members"]:
+                whois_questions = [
+                    "Who is {}?",
+                    "Who is {}?",
+                    "Who is {}?",
+                    "Who is {}?",
+                ]
+                for question in whois_questions:
+                    data.append([
+                        question.format(member),
+                        "{} is a member of the project {}.".format(
+                            member,
+                            project["title"]
+                        )
+                    ])
+            
+        # What are the projects in room X?
+        for room in expo_data["rooms"]:
+            whatare_questions = [
+                "What are the projects in room {}?",
+                "What are the other projects in room {}?",
+                "What can I find in room {}?",
+                "What can I see in room {}?",
+                "What else is in room {}?",
+                "What else can I see in room {}?",
+                "What else can I find in room {}?",
+            ]
+            found = []
+            for project in expo_data["projects"]:
+                if project["roomNumber"] == room:
+                    found.append(project["title"])
+            for question in whatare_questions:
+                data.append([
+                    question.format(self.number_to_speech(room)),
+                    "The projects in room {} are: {}".format(
+                        self.number_to_speech(room),
+                        self.mems2str(found)
+                    )
+                ])
+            
         self.train(data)
+        
+    def mems2str(self, members):
+        if len(members) == 1:
+            return members[0]
+        elif len(members) == 2:
+            return members[0] + " and " + members[1]
+        else:
+            return ", ".join(members[:-1]) + ", and " + members[-1]
         
     def numerify(self, number):
         if number == str(1):
