@@ -327,8 +327,8 @@ while True:
             comms.update({"user-text": query})
         logging.log(logging.INFO, f"[MAIN] Recognized: {query}")
         if not process(query):
-            logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: \n\t{ans}")
             ans = chat.answer(query)
+            logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: \n\t{ans}")
             if not DEV:
                 try:
                     if comms:
