@@ -25,23 +25,24 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-# Start a new browser session in Firefox
-logging.log(logging.INFO, "[MAIN] Starting browser session...")
-driver = webdriver.Chrome()
-wait = WebDriverWait(driver, 3)
-presence = EC.presence_of_element_located
-visible = EC.visibility_of_element_located
-logging.log(logging.INFO, "[MAIN] Browser session started!")
-logging.log(logging.INFO, "[MAIN] installing UBlock Origin from chrome web store...")
-driver.get("https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm")
-# Get the install button (aria-label="Add to Chrome")
-wait.until(visible((By.CLASS_NAME, "webstore-test-button-label")))
-# Click on the install button
-driver.find_element(By.CLASS_NAME, "webstore-test-button-label").click()
-time.sleep(5)
-logging.log(logging.INFO, "[MAIN] UBlock Origin installed!")
-driver.get("https://n3rdium.dev")
-logging.log(logging.INFO, "[MAIN] Navigated to https://n3rdium.dev")
+if not DEV:
+    # Start a new browser session in Firefox
+    logging.log(logging.INFO, "[MAIN] Starting browser session...")
+    driver = webdriver.Chrome()
+    wait = WebDriverWait(driver, 3)
+    presence = EC.presence_of_element_located
+    visible = EC.visibility_of_element_located
+    logging.log(logging.INFO, "[MAIN] Browser session started!")
+    logging.log(logging.INFO, "[MAIN] installing UBlock Origin from chrome web store...")
+    driver.get("https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm")
+    # Get the install button (aria-label="Add to Chrome")
+    wait.until(visible((By.CLASS_NAME, "webstore-test-button-label")))
+    # Click on the install button
+    driver.find_element(By.CLASS_NAME, "webstore-test-button-label").click()
+    time.sleep(2)
+    logging.log(logging.INFO, "[MAIN] UBlock Origin installed!")
+    driver.get("https://n3rdium.dev")
+    logging.log(logging.INFO, "[MAIN] Navigated to https://n3rdium.dev")
 
 logging.log(logging.INFO, "[MAIN] Initializing modules...")
 if not DEV:
@@ -232,10 +233,11 @@ BLACKLISTED_SONGS += [song.replace(")", "") for song in BLACKLISTED_SONGS]
 BLACKLISTED_SONGS += [song.replace("-", "") for song in BLACKLISTED_SONGS]
 
 # Find all instances of
-def find_blacklisted_content(driver):
+def find_blacklisted_content(query):
     # Search the entire page for any mention of the blacklisted songs
     for song in BLACKLISTED_SONGS:
-        if song in driver.page_source.lower():
+        if song.lower() == query.lower():
+            logging.log(logging.WARNING, "[MAIN] found blacklisted content: "+song)
             return True
     return False
 
@@ -247,7 +249,7 @@ def process(response):
             if not DEV:
                 try:
                     if comms:
-                        comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
+                        comms.update({"speaking": "bot", "speaking-text": "Sorry, you are not authorised to play that song."})
                     logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
                     s.speak_offline("Okay, playing "+response[5:]+".")
                     if comms:
@@ -257,7 +259,7 @@ def process(response):
                         comms.update({"speaking": "no-one", "speaking-text": ""})
             # Close all tabs wiht youtuve.com in the URL
             driver.get("https://www.youtube.com/results?search_query=" + response[5:])
-            if not find_blacklisted_content(driver):
+            if not find_blacklisted_content(response[5:]):
                 # Click on the first video
                 # play the video
                 wait.until(visible((By.ID, "video-title")))
@@ -265,11 +267,11 @@ def process(response):
                 return True
             else:
                 # If the video is blacklisted, don't play it
-                logging.log(logging.WARNING, "[MAIN] Sorry, I don't play BTS songs.")
+                logging.log(logging.WARNING, "[MAIN] Sorry, you are not authorised to play that song.")
                 if not DEV:
                     try:
                         if comms:
-                            comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
+                            comms.update({"speaking": "bot", "speaking-text": "Sorry, you are not authorised to play that song."})
                         logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
                         s.speak_offline("You are not authorised to play BTS songs in this fair.")
                         if comms:
@@ -281,7 +283,7 @@ def process(response):
                 driver.get("https://n3rdium.dev")
                 return True
         else:
-            logging.log(logging.WARNING, "[MAIN] Sorry, I don't play BTS songs.")
+            logging.log(logging.WARNING, "[MAIN] Sorry, you are not authorised to play that song.")
             if not DEV:
                 try:
                     if comms:
@@ -299,16 +301,18 @@ def process(response):
     return False
 
 def pause():
-    try:
-        driver.execute_script("document.getElementsByTagName('video')[0].pause()")
-    except:
-        pass
+    if not DEV:
+        try:
+            driver.execute_script("document.getElementsByTagName('video')[0].pause()")
+        except:
+            pass
     
 def play():
-    try:
-        driver.execute_script("document.getElementsByTagName('video')[0].play()")
-    except:
-        pass
+    if not DEV:
+        try:
+            driver.execute_script("document.getElementsByTagName('video')[0].play()")
+        except:
+            pass
 
 logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:

@@ -2,7 +2,7 @@ import random
 import json
 import inflect
 import fuzzywuzzy.fuzz as fuzz
-from sentence_transformers import SentenceTransformer, util
+import spacy
 import _sha256 as sha256
 import tqdm
 import yaml
@@ -31,8 +31,17 @@ else:
     openai.api_base = "http://localhost:5000/v1"
     engine = "ggml-gpt4all-j"
 
-messages = [ {"role": "system", "content": "You are a intelligent assistant. Speak in English only. Give short responses, enough to be spoken in 5 to 8 senconds. Do not give responses like \"as an ai, i cannot ...\" and respond like a real human. Have opinions and other stuffs that humans have, so that humans will feel more comfortable in talking to you. Never mention that you're an AI, and that you cannot do something. If you dont know an answer, respond sarcastically. Respond in short sentences, and not more than 2 sentences. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. Respond shortly. "} ]
+messages = [ 
+    {"role": "system", "content": "You are a intelligent assistant. Speak in English only. Give short responses, enough to be spoken in 5 to 8 senconds. you are a chatbot at a science fair."},
+    {"role": "system", "content": "You must be able to answer questions about the science fair from the json data given below:"},
+    {"role": "system", "content": json.dumps(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "expo_data.json"))), indent=4)}
+]
 def get_response(message):
+    # check for moderation issues with openai
+    message = message.lower()
+    mod = openai.Moderation.create(message, 'text-moderation-stable')
+    if mod["results"][0]["flagged"]:
+        return "I'm sorry, I cannot answer that."
     global messages
     messages.append(
         {"role": "user", "content": message},
@@ -54,6 +63,7 @@ class ChatBot:
                 f.write("{}")
         self.loader = yaml.SafeLoader
         self.speaker = speaker
+        self.nlp = spacy.load("en_core_web_lg")
         
     def train(self, conversation_data):
         logging.log(logging.INFO, f"[CHAT] Training chatbot on {len(conversation_data)} conversation data points...")
@@ -81,12 +91,11 @@ class ChatBot:
         return self.fuzz_ratio(a, b) / 100
     
     def calculate_similarity_better(self, a, b):
-        # Use sentence transformers
         if not a in self.nlp_cache:
-            self.nlp_cache[a] = self.sentence_transformer.encode(a)
+            self.nlp_cache[a] = self.nlp(' '.join([str(token) for token in self.nlp(a.lower()) if not token.is_stop]))
         if not b in self.nlp_cache:
-            self.nlp_cache[b] = self.sentence_transformer.encode(b)
-        return util.pytorch_cos_sim(self.nlp_cache[a], self.nlp_cache[b])[0][0]
+            self.nlp_cache[b] = self.nlp(' '.join([str(token) for token in self.nlp(b.lower()) if not token.is_stop]))
+        return self.nlp_cache[a].similarity(self.nlp_cache[b])
     
     def calculate_similarity(self, query, conversation_entry):
         similarity_scores = []
@@ -291,6 +300,124 @@ class ChatBot:
             ] for i in range(len(qs))]
             for i in range(len(_)):
                 data.append(_[i])
+                
+        # Who made project X?
+        logging.log(logging.INFO, "[CHAT] Training chatbot on project creators...")
+        qs = [
+            "Who made {}?",
+            "Who made the {} project?",
+            "Who made the {}?",
+            "Who made project {}?",
+            "Who created {}?",
+            "Who created the {} project?",
+            "Who created the {}?",
+            "Who created project {}?",
+        ]
+        for project in expo_data["projects"]:
+            # Create members string
+            mmbrs = project["members"]
+            _ = ""
+            for i in range(len(mmbrs)):
+                if i == len(mmbrs) - 1:
+                    _ += " and "
+                elif i != 0:
+                    _ += ", "
+                _ += mmbrs[i]
+            _ = [[
+                qs[i].format(project["title"]),
+                "The {} project was made by {}.".format(
+                    project["title"], 
+                    _
+                ),
+            ] for i in range(len(qs))]
+            print(_)
+            for i in range(len(_)):
+                data.append(_[i])
+                
+        # Train on project descriptions
+        logging.log(logging.INFO, "[CHAT] Training chatbot on project descriptions...")
+        qs = [
+            "What is {}?",
+            "What is the {} project?",
+            "What is the {}?",
+            "What is project {}?",
+            "Explain {}.",
+            "Explain the {} project.",
+            "Explain the {}.",
+            "Explain project {}.",
+            "Tell me about {}.",
+            "Tell me about the {} project.",
+            "Tell me about the {}.",
+            "Tell me about project {}.",
+        ]
+        for project in expo_data["projects"]:
+            _ = [[
+                qs[i].format(project["title"]),
+                "{}".format(project["description"]),
+            ] for i in range(len(qs))]
+            for i in range(len(_)):
+                data.append(_[i])
+                    
+        # Train on student names and corresponding projects
+        logging.log(logging.INFO, "[CHAT] Training chatbot on student names and corresponding projects...")
+        qs = [
+            "Who made {}?",
+            "Who made the {} project?",
+            "Who made the {}?",
+            "Who made project {}?",
+            "Who created {}?",
+            "Who created the {} project?",
+            "Who created the {}?",
+            "Who created project {}?",
+        ]
+        for project in expo_data["projects"]:
+            # Create members string
+            mmbrs = project["members"]
+            _names = ""
+            for i in range(len(mmbrs)):
+                if i == len(mmbrs) - 1:
+                    _names += " and "
+                elif i != 0:
+                    _names += ", "
+                _names += mmbrs[i]
+            _ = [[
+                qs[i].format(project["title"]),
+                "The {} project was made by {}.".format(project["title"], _names),
+            ] for i in range(len(qs))]
+            for i in range(len(_)):
+                data.append(_[i])
+                
+        # Train on student places
+        logging.log(logging.INFO, "[CHAT] Training chatbot on student places...")
+        qs = [
+            "Where is {}?",
+            "Where is my friend {}?",
+            "Where is my friend {}'s project?",
+            "Where is {}'s project?",
+        ]
+        for project in expo_data["projects"]:
+            for member in project["members"]:
+                _ = [[
+                    qs[i].format(member),
+                    "The {} project is in the {} floor, room {}.".format(
+                        project["title"], 
+                        self.numerify(project["floor"]), 
+                        self.number_to_speech(project["roomNumber"])
+                    ),
+                ] for i in range(len(qs))]
+                for i in range(len(_)):
+                    data.append(_[i])
+                
+        # When there are more that 2 projects with the same name
+        found = {}
+        for project in expo_data["projects"]:
+            try:
+                found[project["title"]] += 1
+            except KeyError:
+                found[project["title"]] = 1
+        found_exceptions = [i for i in found if found[i] > 1]
+        for exception in found_exceptions:
+            print(exception)
         
         # TODO: Work in progress
         self.train(data)
