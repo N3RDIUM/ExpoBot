@@ -16,8 +16,9 @@ log.setLevel(logging.ERROR)
 
 # Live face recognition
 cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 900)
+cap.set(cv2.CAP_PROP_EXPOSURE, -8.0)
 
 # Face data: Last seen
 face_data = {}
@@ -64,24 +65,14 @@ def start_server():
         return flask.jsonify({"data": greets})
     app.run(port=5000)
     
-
-thread = threading.Thread(target=start_server)
-thread.start()
-
-import subprocess
-import sys
-import os
-
-subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "feedback.py")])
-subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "transcribe_bg.py")])
-    
-while True:
-    ret, frame = cap.read()
+frames = []
+def process(frame):
     downscale_factor = 1
     downscaled_frame = cv2.resize(frame, (0, 0), fx=1/downscale_factor, fy=1/downscale_factor)
     if ret:        
         face_locations = fr.face_locations(downscaled_frame, model="hog")
         face_encodings = fr.face_encodings(downscaled_frame, face_locations, model="large")
+        seeing = []
         for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
             matches = fr.compare_faces(list(faces.values()), face_encoding)
             if True not in matches:
@@ -102,24 +93,13 @@ while True:
             else:
                 # Find the name of the face
                 name = list(faces.keys())[matches.index(True)]
+                print(f"[{time.time()}] Found face: {name}")
                 # Special greetings
-                for special in ["PrincipalMaam", "AbhasSir", "PritiMaam", "ShreyasSir", "MthSir", "Creator", "Creator2", "Creator3", "Mentor", ]:
+                for special in ["PrincipalMaam", "AbhasSir", "PritiMaam", "ShreyasSir", "MthSir", "Creator", "Creator2", "Creator3", "Mentor"]:
                     if name == special and name not in greeted:
-                        if time.time() - face_data[name]["seen"][-1] < 4:
+                        if time.time() - face_data[name]["seen"][-1] < 5:
                             update_specialgreet(name)
                             greeted.append(name)
-                # Mark left eye
-                face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="large")
-                for face_landmarks in face_landmarks_list:
-                    eye = face_landmarks["left_eye"]
-                    avg_x = sum([x[0] for x in eye]) / len(eye)
-                    avg_y = sum([x[1] for x in eye]) / len(eye)
-                    avg_x += left
-                    avg_y += top
-                    size = max([x[0] for x in eye]) - min([x[0] for x in eye])
-                    cv2.rectangle(frame, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size / 2)*downscale_factor), (int(avg_x + size / 2)*downscale_factor, int(avg_y + size / 2)*downscale_factor), (0, 255, 0), 1)
-                    cv2.putText(frame, name, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size)*downscale_factor), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-                    cv2.circle(frame, (int(avg_x)*downscale_factor, int(avg_y)*downscale_factor), 1, (0, 255, 0), 3)
                 # Update last seen
                 if name in face_data:
                     if not face_data[name]["feedback"]:
@@ -131,11 +111,37 @@ while True:
                         else:
                             face_data[name]["seen"][-1] = time.time()
 
-        # Show the frame
-        cv2.imshow("Video", frame)
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            thread.join()
-            break
+def start_processing():
+    while True:
+        try:
+            process(frames.pop(0))
+        except:
+            time.sleep(0.1)
+            continue
+        
+pthread = threading.Thread(target=start_processing)
+pthread.start()
+
+thread = threading.Thread(target=start_server)
+thread.start()
+
+import subprocess
+import sys
+import os
+
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "feedback.py")])
+subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "transcribe_bg.py")])
+    
+f = 0
+
+while True:
+    ret, frame = cap.read()
+    if f % 60 == 0:
+        frames.append(frame)
+    # Show the frame
+    cv2.imshow("Video", frame)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        thread.join()
+        break
     else:
-        print("Error reading frame from camera")
         continue
