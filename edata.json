@@ -1,39 +1,4 @@
 {
-    "categories": [
-        {
-            "title":"Science", 
-            "description": "Science is the systematic study of the structure and behavior of the physical and natural world through observation and experiment."
-        },
-        {
-            "title": "Agriculture",
-            "description": "Agriculture is the science and art of cultivating plants and livestock."
-        },
-        {
-            "title": "Engineering",
-            "description": "Engineering is the application of science and mathematics to solve problems."
-        },
-        {
-            "title": "Climate Change",
-            "description": "Climate change is a change in the usual weather found in a place."
-        },
-        {
-            "title": "Chemistry",
-            "description": "Chemistry is the study of matter and the changes it undergoes."
-        },
-        {
-            "title": "Science in Daily Life",
-            "description": "Science is deeply and widely widely rooted in everything we do today, including common activities of our daily life."
-        },
-        {
-            "title": "Robotics",
-            "description": "Robotics is the branch of technology that deals with the design, construction, operation, structural disposition, manufacture and application of robots."
-        },
-        {
-            "title": "Physics",
-            "description": "Physics is the study of matter, motion, energy, and force."
-        }
-    ],
-    
     "floors": [
         "2",
         "3"
