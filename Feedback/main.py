@@ -93,7 +93,7 @@ def process(frame):
             else:
                 # Find the name of the face
                 name = list(faces.keys())[matches.index(True)]
-                print(f"[{time.time()}] Found face: {name}")
+                seeing.append(name)
                 # Special greetings
                 for special in ["PrincipalMaam", "AbhasSir", "PritiMaam", "ShreyasSir", "MthSir", "Creator", "Creator2", "Creator3", "Mentor"]:
                     if name == special and name not in greeted:
@@ -104,17 +104,19 @@ def process(frame):
                 if name in face_data:
                     if not face_data[name]["feedback"]:
                         # If it's been more than 2 minutes since the last time we saw this face, update
-                        if face_data[name]["seen"][-1] < time.time() - 60*10:
+                        if face_data[name]["seen"][-1] < time.time() - 10:
                             if face_data[name]["seen"][-1] == 0:
                                 face_data[name]["seen"] = []
                             face_data[name]["seen"].append(time.time())
                         else:
                             face_data[name]["seen"][-1] = time.time()
-
+        print(f"\r\r[F] Found faces: {seeing}", end="")
 def start_processing():
     while True:
         try:
-            process(frames.pop(0))
+            # Only process the last frame
+            process(frames.pop(-1))
+            del frames[:]
         except:
             time.sleep(0.1)
             continue

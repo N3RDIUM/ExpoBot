@@ -30,7 +30,7 @@ class Recognizer():
                 return self.r.recognize_google(audio, language="en-IN")
             except sr.UnknownValueError:
                 logging.log(logging.INFO, "[RECOGNIZER] Google Speech Recognition could not understand audio!")
-                return self.recognize_from_mic()
+                return ""
     
     def record_and_save(self, filename):
         with self.m as source:

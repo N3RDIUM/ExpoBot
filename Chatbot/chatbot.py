@@ -75,10 +75,10 @@ class ChatBot:
         for data in tqdm.tqdm(self.conversation_data, desc="Creating tts cache for train"):
             for utterance in data:
                 if self.speaker and not self.is_question(utterance):
-                    self.speaker.create_offline_cache(utterance, quiet=True)
+                    self.speaker.create_speech_cache(utterance)
         for utterance in tqdm.tqdm(self.fallbacks, desc="Creating tts cache for fallbacks"):
             if self.speaker and not self.is_question(utterance):
-                self.speaker.create_offline_cache(utterance, quiet=True)
+                self.speaker.create_speech_cache(utterance)
     
     def is_question(self, utterance):
         return "?" in utterance

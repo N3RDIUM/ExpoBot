@@ -322,6 +322,7 @@ def play():
 
 logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:
+    time.sleep(0.5) # Wait for the feedback process to get the lockfile too
     try:
         if not DEV:
             if comms:
