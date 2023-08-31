@@ -1,39 +1,4 @@
 {
-    "categories": [
-        {
-            "title":"Science", 
-            "description": "Science is the systematic study of the structure and behavior of the physical and natural world through observation and experiment."
-        },
-        {
-            "title": "Agriculture",
-            "description": "Agriculture is the science and art of cultivating plants and livestock."
-        },
-        {
-            "title": "Engineering",
-            "description": "Engineering is the application of science and mathematics to solve problems."
-        },
-        {
-            "title": "Climate Change",
-            "description": "Climate change is a change in the usual weather found in a place."
-        },
-        {
-            "title": "Chemistry",
-            "description": "Chemistry is the study of matter and the changes it undergoes."
-        },
-        {
-            "title": "Science in Daily Life",
-            "description": "Science is deeply and widely widely rooted in everything we do today, including common activities of our daily life."
-        },
-        {
-            "title": "Robotics",
-            "description": "Robotics is the branch of technology that deals with the design, construction, operation, structural disposition, manufacture and application of robots."
-        },
-        {
-            "title": "Physics",
-            "description": "Physics is the study of matter, motion, energy, and force."
-        }
-    ],
-    
     "floors": [
         "2",
         "3"
@@ -48,18 +13,15 @@
     "projects": [
         {
             "title": "Rainwater Harvesting",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
@@ -67,113 +29,102 @@
                 "Arohi",
                 "Sirsa",
                 "Shruti"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Rainwater Harvesting",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 "Aksha S"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Newton's Cradel",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Rainwater Harvesting",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 "Atharva Sharma"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Parts of plant",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 "Divanka Dere"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Ground water recharge",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 "Arnav Pisal"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Water purification",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Land pollution",
-            "description": "",
-            "category": "",
             "roomNumber": "207",
             "floor": "2",
             "members": [
                 "Akshara Deo"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Water pollution",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Zayan Bhat"
-            ]
+            ],
+            "class": "4 Narmada"
         },
         {
             "title": "Water Cycle ",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Sharanya Roy"
-            ]
+            ],
+            "class": "3 Kaveri"
         },
         {
             "title": "Global Warming",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Mathan Zode",
                 "Aayush Bhabhate"
-            ]
+            ],
+            "class": "5 Kaveri"
         },
         {
             "title": "",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
@@ -182,174 +133,158 @@
                 "Komal",
                 "Shrisha Shinde",
                 "Manasvi",
-                "Ananya singh"
-            ]
+                "A\"ya singh"
+            ],
+            "class": ""
         },
         {
             "title": "Atomic sturcture",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Atharva",
                 "Pankaj Sutar",
                 "Krishna Malpani"
-            ]
+            ],
+            "class": "7 kaveri"
         },
         {
             "title": "",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Arpita Mishra"
-            ]
+            ],
+            "class": "4 Narmada"
         },
         {
             "title": "Rainwater Harvesting",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Divya Agarwal"
-            ]
+            ],
+            "class": "5 Kaveri"
         },
         {
             "title": "Water Purification ",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Ruchi",
                 "Saiyan",
                 "Vansh"
-            ]
+            ],
+            "class": "5 Ganga"
         },
         {
             "title": "",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Mrunal Nonde"
-            ]
+            ],
+            "class": "7 Yamuna"
         },
         {
             "title": "Global warming",
-            "description": "",
-            "category": "",
             "roomNumber": "210",
             "floor": "2",
             "members": [
                 "Furgan",
                 "Lavanya More"
-            ]
+            ],
+            "class": "5 Kaveri"
         },
         {
             "title": "Global Warming",
-            "description": "",
-            "category": "",
             "roomNumber": "211",
             "floor": "2",
             "members": [
                 "Safwan Khan",
                 "Md. Furquar",
                 "Avneesh"
-            ]
+            ],
+            "class": "5 narmada"
         },
         {
             "title": "Water pollution",
-            "description": "",
-            "category": "",
             "roomNumber": "211",
             "floor": "2",
             "members": [
                 "Rishita Mude"
-            ]
+            ],
+            "class": "4 Kaveri"
         },
         {
             "title": "Food chain",
-            "description": "",
-            "category": "",
             "roomNumber": "211",
             "floor": "2",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": " Wind energy",
-            "description": "",
-            "category": "",
             "roomNumber": "211",
             "floor": "2",
             "members": [
                 "Giya Parikh",
                 "Vedica Ware",
                 "Neyeti"
-            ]
+            ],
+            "class": "7 Ganga"
         },
         {
             "title": "Water Cycle ",
-            "description": "",
-            "category": "",
             "roomNumber": "211",
             "floor": "2",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": " Drip irrigation",
-            "description": "",
-            "category": "",
             "roomNumber": "211",
             "floor": "2",
             "members": [
                 "Dhyani Patel"
-            ]
+            ],
+            "class": "5 Kaveri"
         },
         {
             "title": "Photosynthesis",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Akshita Borade",
                 "Aradhya Pandule",
                 "Vedanti Darshbute"
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Bridge",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Swaraj"
-            ]
+            ],
+            "class": "8 Ganga"
         },
         {
             "title": "Types of irrigation",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Thermo electric generator",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
@@ -357,132 +292,121 @@
                 "Soham M",
                 "Sujay B",
                 "Vedant M\r\nAyaan S"
-            ]
+            ],
+            "class": "7 Ganga"
         },
         {
             "title": "Smart Car",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Vihaan Bhandage",
                 "Vard Kolekar"
-            ]
+            ],
+            "class": "8"
         },
         {
             "title": "Windmill",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Mrunal Londhe"
-            ]
+            ],
+            "class": "7 yamuna"
         },
         {
             "title": "Chemical company",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Robotics (Car)",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Sarthak Jadhav"
-            ]
+            ],
+            "class": "7 Kaveri"
         },
         {
             "title": "Types of Pollution",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Sanskruti K",
                 "Aarohi Patil",
                 "Urvish"
-            ]
+            ],
+            "class": "4 kaveri"
         },
         {
             "title": "DNA model",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Earthquake Detecter",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 "Krishna Malpani",
                 "Pankaj Sutar",
                 "Atharva Mapri"
-            ]
+            ],
+            "class": "7 Kaveri"
         },
         {
             "title": "Hydrolic Crane",
-            "description": "",
-            "category": "",
             "roomNumber": "307",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": ""
         },
         {
             "title": "Fun with Science\r\n(Electric Loop)",
-            "description": "",
-            "category": "",
             "roomNumber": "310",
             "floor": "3",
             "members": [
                 "Tanmay"
-            ]
+            ],
+            "class": "6 Kaveri"
         },
         {
             "title": "Electric loop",
-            "description": "",
-            "category": "",
             "roomNumber": "310",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": "7 Kaeri"
         },
         {
             "title": "Magnetic games",
-            "description": "",
-            "category": "",
             "roomNumber": "310",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": "7 kaveri"
         },
         {
             "title": "Air pollution detecter",
-            "description": "",
-            "category": "",
             "roomNumber": "310",
             "floor": "3",
             "members": [
                 ""
-            ]
+            ],
+            "class": "4 ganga"
         }
     ]
 }
