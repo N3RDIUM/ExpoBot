@@ -1,6 +1,8 @@
 import logging
+import time
+import fuzzywuzzy
 logging.basicConfig(level=logging.INFO)
-DEV = False
+DEV = True
 # for older hardware, set this to True
 # TODO: Also cache fallbacks
 
@@ -18,6 +20,28 @@ if not DEV:
     from servercomms import ServerComms
     import socket
 from chatbot import ChatBot
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+# Start a new browser session in Firefox
+logging.log(logging.INFO, "[MAIN] Starting browser session...")
+driver = webdriver.Chrome()
+wait = WebDriverWait(driver, 3)
+presence = EC.presence_of_element_located
+visible = EC.visibility_of_element_located
+logging.log(logging.INFO, "[MAIN] Browser session started!")
+logging.log(logging.INFO, "[MAIN] installing UBlock Origin from chrome web store...")
+driver.get("https://chrome.google.com/webstore/detail/ublock-origin/cjpalhdlnbpafiamejdnhcphjbkeiagm")
+# Get the install button (aria-label="Add to Chrome")
+wait.until(visible((By.CLASS_NAME, "webstore-test-button-label")))
+# Click on the install button
+driver.find_element(By.CLASS_NAME, "webstore-test-button-label").click()
+time.sleep(5)
+logging.log(logging.INFO, "[MAIN] UBlock Origin installed!")
+driver.get("https://n3rdium.dev")
+logging.log(logging.INFO, "[MAIN] Navigated to https://n3rdium.dev")
 
 logging.log(logging.INFO, "[MAIN] Initializing modules...")
 if not DEV:
@@ -111,13 +135,186 @@ chat.load_cache()
 logging.log(logging.INFO, "[MAIN] Saving speech cache...")
 chat.create_speech_cache()
 
+BLACKLISTED_SONGS = [
+    "bts",
+    "2 Cool 4 Skool"
+    "O!RUL8,2?"
+    "Skool Luv Affair"
+    "Skool Luv Affair: Special Addition"
+    "No More Dream"
+    "BOY IN LUV"
+    "Dark & Wild"
+    "Danger"
+    "Wake Up"
+    "The Most Beautiful Moment In Life Pt.1"
+    "FOR YOU"
+    "The Most Beautiful Moment In Life Pt.2"
+    "I NEED U"
+    "RUN"
+    "The Most Beautiful Moment In Life: Young Forever"
+    "Youth"
+    "WINGS"
+    "You Never Walk Alone"
+    "Blood Sweat & Tears"
+    "Love Yourself: Her"
+    "MIC DROP / DNA / CRYSTAL SNOW"
+    "Face Yourself"
+    "Love Yourself: Tear"
+    "Love Yourself: Answer"
+    "FAKE LOVE/Airplane Pt.2"
+    "Map of the Soul: Persona"
+    "BTS World Original Soundtrack"
+    "Lights/Boy With Luv"
+    "Map of the Soul: 7"
+    "Map of the Soul 7: The Journey"
+    "Dynamite"
+    "BE"
+    "Film Out"
+    "Butter"
+    "Permission To Dance",
+    "No More Dream",
+    "We Are Bulletproof Pt.2",
+    "N.O",
+    "Boy In Luv",
+    "Just One Day",
+    "Danger",
+    "War of Hormone",
+    "I Need U",
+    "Dope",
+    "Run",
+    "Epilogue: Young Forever",
+    "Fire",
+    "Save Me",
+    "Blood Sweat & Tears",
+    "Spring Day",
+    "Not Today",
+    "DNA",
+    "Mic Drop",
+    "Fake Love",
+    "IDOL",
+    "Boy With Luv",
+    "Make It Right",
+    "Black Swan",
+    "ON",
+    "Dynamite",
+    "Life Goes On",
+    "Butter",
+    "Permission to Dance",
+    "Butter (Hotter Remix)",
+    "Butter (Sweeter Remix)",
+    "Stay",
+    "My Universe (with Coldplay)",
+    "Film Out",
+    "Peaches and Cream",
+    "Blue & Grey",
+    "Dis-ease",
+    "Stay Gold",
+    "Your Eyes Tell",
+    "Stay",
+    "Film Out",
+    "Film Out",
+    "Life Goes On (Dinner Party Remix)",
+    "Film Out",
+]
+# Process the blacklisted songs
+# Make all characters lowercase
+BLACKLISTED_SONGS += [song.lower() for song in BLACKLISTED_SONGS]
+# And without the special characters
+BLACKLISTED_SONGS += [song.replace(" ", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace("!", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace(".", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace(",", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace(":", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace("/", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace("&", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace("(", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace(")", "") for song in BLACKLISTED_SONGS]
+BLACKLISTED_SONGS += [song.replace("-", "") for song in BLACKLISTED_SONGS]
+
+# Find all instances of
+def find_blacklisted_content(driver):
+    # Search the entire page for any mention of the blacklisted songs
+    for song in BLACKLISTED_SONGS:
+        if song in driver.page_source.lower():
+            return True
+    return False
+
+def process(response):
+    global s
+    if response.startswith("play"):
+        if not "bts" in response.lower():
+            logging.log(logging.INFO, "[MAIN] Playing song...")
+            if not DEV:
+                try:
+                    if comms:
+                        comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
+                    logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
+                    s.speak_offline("Okay, playing "+response[5:]+".")
+                    if comms:
+                        comms.update({"speaking": "no-one", "speaking-text": ""})
+                except ValueError:
+                    if comms:
+                        comms.update({"speaking": "no-one", "speaking-text": ""})
+            # Close all tabs wiht youtuve.com in the URL
+            driver.get("https://www.youtube.com/results?search_query=" + response[5:])
+            if not find_blacklisted_content(driver):
+                # Click on the first video
+                # play the video
+                wait.until(visible((By.ID, "video-title")))
+                driver.find_element(By.ID, "video-title").click()
+                return True
+            else:
+                # If the video is blacklisted, don't play it
+                logging.log(logging.WARNING, "[MAIN] Sorry, I don't play BTS songs.")
+                if not DEV:
+                    try:
+                        if comms:
+                            comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
+                        logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
+                        s.speak_offline("Sorry, you are not authorised to play BTS songs in this fair.")
+                        if comms:
+                            comms.update({"speaking": "no-one", "speaking-text": ""})
+                    except ValueError:
+                        if comms:
+                            comms.update({"speaking": "no-one", "speaking-text": ""})
+                return True
+        else:
+            logging.log(logging.WARNING, "[MAIN] Sorry, I don't play BTS songs.")
+            if not DEV:
+                try:
+                    if comms:
+                        comms.update({"speaking": "bot", "speaking-text": "Sorry, I don't play BTS songs."})
+                    logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
+                    s.speak_offline("Sorry, you are not authorised to play BTS songs in this fair.")
+                    if comms:
+                        comms.update({"speaking": "no-one", "speaking-text": ""})
+                except ValueError:
+                    if comms:
+                        comms.update({"speaking": "no-one", "speaking-text": ""})
+            return True
+    return False
+
+def pause():
+    try:
+        driver.execute_script("document.getElementsByTagName('video')[0].pause()")
+    except:
+        pass
+    
+def play():
+    try:
+        driver.execute_script("document.getElementsByTagName('video')[0].play()")
+    except:
+        pass
+
 logging.log(logging.INFO, f"[MAIN] Training complete! {len(chat.conversation_data)} data points, {len(chat.fallbacks)} fallback points.")
 while True:
     try:
         if not DEV:
             if comms:
                 comms.update({"listening": 1})
+            pause()
             query = r.recognize_from_mic()
+            play()
             if comms:
                 comms.update({"listening": 0})
         else:
@@ -125,19 +322,20 @@ while True:
         if comms:
             comms.update({"user-text": query})
         logging.log(logging.INFO, f"[MAIN] Recognized: {query}")
-        ans = chat.answer(query)
-        logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: \n\t{ans}")
-        if not DEV:
-            try:
-                if comms:
-                    comms.update({"speaking": "bot", "speaking-text": ans})
-                logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
-                s.speak_elevenlabs(ans)
-                if comms:
-                    comms.update({"speaking": "no-one", "speaking-text": ""})
-            except ValueError: # chatbot answered with nothing
-                if comms:
-                    comms.update({"speaking": "no-one", "speaking-text": ""})
+        if not process(query):
+            logging.log(logging.INFO, f"[MAIN] ExpoBot Answered: \n\t{ans}")
+            ans = chat.answer(query)
+            if not DEV:
+                try:
+                    if comms:
+                        comms.update({"speaking": "bot", "speaking-text": ans})
+                    logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
+                    s.speak_offline(ans)
+                    if comms:
+                        comms.update({"speaking": "no-one", "speaking-text": ""})
+                except ValueError: # chatbot answered with nothing
+                    if comms:
+                        comms.update({"speaking": "no-one", "speaking-text": ""})
     except KeyboardInterrupt:
         logging.log(logging.INFO, "[MAIN] KeyboardInterrupt detected. Saving cache and exiting...")
         chat.save_cache()

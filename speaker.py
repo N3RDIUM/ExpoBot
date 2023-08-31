@@ -114,3 +114,8 @@ class Speaker():
         if not quiet:
             logging.log(logging.INFO, "[SPEAKER] Moved file "+filename+" to "+new_filename)
             
+if __name__ == "__main__":
+    s = Speaker()
+    s.initialize()
+    while True:
+        s.speak_gtts(input("Enter text: "))

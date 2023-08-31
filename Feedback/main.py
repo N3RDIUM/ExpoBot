@@ -30,7 +30,7 @@ def update_specialgreet(data):
 import os
 faces = {}
 for file in os.listdir("faces"):
-    if file.endswith(".jpg"):
+    if file.endswith(".jpg") or file.endswith(".jpeg"):
         try:
             faces[file[:-4]] = fr.face_encodings(fr.load_image_file("faces/" + file), model="small")[0]
             face_data[file[:-4]] = {"seen":[0], "feedback": False}
@@ -73,7 +73,7 @@ subprocess.Popen([sys.executable, os.path.join(os.path.dirname(__file__), "trans
     
 while True:
     ret, frame = cap.read()
-    downscale_factor = 2
+    downscale_factor = 1
     downscaled_frame = cv2.resize(frame, (0, 0), fx=1/downscale_factor, fy=1/downscale_factor)
     if ret:        
         face_locations = fr.face_locations(downscaled_frame, model="hog")
@@ -99,10 +99,11 @@ while True:
                 # Find the name of the face
                 name = list(faces.keys())[matches.index(True)]
                 # Special greetings
-                for special in ["Creator", "Creator2", "Creator3", "Mentor"]:
+                for special in ["PrincipalMaam", "AbhasSir", "PritiMaam", "ShreyasSir", "MthSir", "Creator", "Creator2", "Creator3", "Mentor", ]:
                     if name == special and name not in greeted:
-                        update_specialgreet(name)
-                        greeted.append(name)
+                        if time.time() - face_data[name]["seen"][-1] < 4:
+                            update_specialgreet(name)
+                            greeted.append(name)
                 # Mark left eye
                 face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="small")
                 for face_landmarks in face_landmarks_list:
@@ -119,7 +120,7 @@ while True:
                 if name in face_data:
                     if not face_data[name]["feedback"]:
                         # If it's been more than 2 minutes since the last time we saw this face, update
-                        if face_data[name]["seen"][-1] < time.time() - 20:
+                        if face_data[name]["seen"][-1] < time.time() - 60*10:
                             if face_data[name]["seen"][-1] == 0:
                                 face_data[name]["seen"] = []
                             face_data[name]["seen"].append(time.time())

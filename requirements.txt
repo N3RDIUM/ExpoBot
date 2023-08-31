@@ -19,3 +19,4 @@ noise
 googletrans
 openai
 elevenlabs
+selenium
