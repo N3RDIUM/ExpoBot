@@ -104,7 +104,7 @@ def process(frame):
                 if name in face_data:
                     if not face_data[name]["feedback"]:
                         # If it's been more than 2 minutes since the last time we saw this face, update
-                        if face_data[name]["seen"][-1] < time.time() - 10:
+                        if face_data[name]["seen"][-1] < time.time() - 60*10: # ten mins minimum
                             if face_data[name]["seen"][-1] == 0:
                                 face_data[name]["seen"] = []
                             face_data[name]["seen"].append(time.time())
