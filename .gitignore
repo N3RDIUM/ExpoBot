@@ -169,3 +169,4 @@ nltk_data
 config.json
 LocalAI
 *.lock
+Chatbot/expo_data.json
