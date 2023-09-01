@@ -316,10 +316,12 @@ class ChatBot:
         
     def numerify(self, number):
         if number == str(1):
-            return "first"
+            return "ground"
         elif number == str(2):
-            return "second"
+            return "first"
         elif number == str(3):
+            return "second"
+        elif number == str(4):
             return "third"
         
     def number_to_speech(self, number):
