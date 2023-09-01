@@ -12,7 +12,7 @@ p = inflect.engine()
 import logging
 logging.basicConfig(level=logging.INFO)
 
-THRESHOLD = 0.8 # Similarity threshold
+THRESHOLD = 76 # Similarity threshold
 
 import os
 import sys
@@ -31,8 +31,13 @@ else:
     openai.api_base = "http://localhost:5000/v1"
     engine = "ggml-gpt4all-j"
 
+# Don't ask me why I wrote these prompts, I don't know either. I just know that they work.
+# Maybe they're just there to make the chatbot seem more human, and respond better to questions.
 messages = [ 
-    {"role": "system", "content": "You are a intelligent assistant. Speak in English only. Give short responses, enough to be spoken in 5 to 8 senconds. you are a chatbot at a science fair."},
+    {"role": "system", "content": "You are a intelligent assistant. Speak in English only. Give short responses, enough to be spoken in 5 to 8 senconds. you are a chatbot at a science fair. When someone asks you where a person is, respond according to the data given below in json (just tell the place their project is at)."},
+    {"role": "system", "content": "The speech recognition systems used in this project are not perfect. Allow for some errors in the speech recognition. For example, Vrunda may be recognized as Brenda or Vrinda. You can use the json data given below to figure it out. If you are not sure, just say you don't know."},
+    {"role": "system", "content": "If there are multiple projects with the same name, just say a random one, then tell them that there are multiple projects with the same name, and ask them to be more specific, then tell them where the project theyre talking about is located."},
+    {"role": "system", "content": "You are a chatbot at a science fair. When someone asks you where a person is, respond according to the data given below in json."},
     {"role": "system", "content": "You must be able to answer questions about the science fair from the json data given below:"},
     {"role": "system", "content": json.dumps(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "expo_data.json"))), indent=4)}
 ]
@@ -88,7 +93,11 @@ class ChatBot:
         self.fallbacks += fallbacks
     
     def calculate_similarity_dirty(self, a, b):
-        return self.fuzz_ratio(a, b) / 100
+        val = self.fuzz_ratio(a.lower(), b.lower())
+        if val > THRESHOLD:
+            return 0
+        else:
+            return val
     
     def calculate_similarity_better(self, a, b):
         if not a in self.nlp_cache:
@@ -130,6 +139,9 @@ class ChatBot:
             max_similarity = max(i[0] for i in linear_similarities)
             max_similarity_index = next(i[1] for i in linear_similarities if i[0] == max_similarity)
             logging.log(logging.INFO, f"[CHAT] Max found to be {max_similarity} at index {max_similarity_index}")
+            global messages
+            messages.append({"role": "user", "content": query})
+            messages.append({"role": "system", "content": self.conversation_data[max_similarity_index[0]][max_similarity_index[1]]})
             return self.conversation_data[max_similarity_index[0]][max_similarity_index[1] + 1]
         except:
             try:
@@ -206,6 +218,25 @@ class ChatBot:
                         self.mems2str(project["members"])
                     )
                 ])
+                
+            # Student X made what project?
+            for member in project["members"]:
+                studentmade_questions = [
+                    "{} made what project?",
+                    "{} made what?",
+                    "{} made what project?",
+                    "{} made what project?",
+                    "What project did {} make?",
+                    "What did {} make?",
+                ]
+                for question in studentmade_questions:
+                    data.append([
+                        question.format(member),
+                        "{} made the project {}.".format(
+                            member,
+                            project["title"]
+                        )
+                    ])
                 
             # Where is student X?
             for member in project["members"]:
