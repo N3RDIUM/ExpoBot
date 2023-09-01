@@ -15,7 +15,7 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 # Live face recognition
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 900)
 cap.set(cv2.CAP_PROP_EXPOSURE, -8.0)
@@ -123,7 +123,7 @@ def process(frame):
                             face_data[name]["seen"].append(time.time())
                         else:
                             face_data[name]["seen"][-1] = time.time()
-        print(f"[F] Found faces: {seeing}", end="\r")
+        print(f"[F] Found faces: {seeing}; data: {face_data}")
         
 # pthread = threading.Thread(target=start_processing)
 # pthread.start()

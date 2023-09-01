@@ -121,7 +121,7 @@ while not glfw.window_should_close(window):
         if server.initialized and not server.connected:
             text((10, 10), "Waiting for client " + get_spinner())
         if server.connected:
-            _amplitude_samples.append(server.data["amplitude"] / 10)
+            _amplitude_samples.append(server.data["amplitude"] / 16)
             if len(amplitude_samples) > 16:
                 amplitude_samples.pop(0)
             if len(_amplitude_samples) > 8:
@@ -129,7 +129,7 @@ while not glfw.window_should_close(window):
             smooth_amplitude = sum(_amplitude_samples) / len(_amplitude_samples)
             amplitude_samples.append(smooth_amplitude)
             
-            amplitude_samples_large.append(server.data["amplitude"])
+            amplitude_samples_large.append(server.data["amplitude"] / 16)
             if len(amplitude_samples_large) > 512:
                 amplitude_samples_large.pop(0)
 
@@ -154,15 +154,15 @@ while not glfw.window_should_close(window):
     # Draw the 3D scene
     _setup_3d()
     glClearColor(
-        0.1 + noise.pnoise1(_frame / 800 + 64) / 8 + frames_listening / 60,
-        0.1 + noise.pnoise1(_frame / 800 + 32) / 8 + frames_listening / 60,
-        0.1 + noise.pnoise1(_frame / 800 + 16) / 8 + frames_listening / 60,
+        0.1 + frames_listening / 60,
+        0.1 + frames_listening / 60,
+        0.1 + frames_listening / 60,
         1
     )
     # player.update(window)
     if server:
         try:
-            _frame += 1 + abs(smooth_amplitude - sum(amplitude_samples_large) / len(amplitude_samples_large)) / 16
+            _frame += 1 + abs(smooth_amplitude - sum(amplitude_samples_large) / len(amplitude_samples_large)) / 64
         except: _frame += 1
         a1 = 0
         try:
@@ -178,22 +178,22 @@ while not glfw.window_should_close(window):
         try:
             a3 = amplitude_samples[len(amplitude_samples) // 4 * 3]
         except: pass
-        sphere((0, 0, -10), (smooth_amplitude*2 + noise.pnoise1(_frame / 200 - 400)*50) / 1024 + 0.24, (
+        sphere((0, 0, -10), (smooth_amplitude*2 + noise.pnoise1(_frame / 200 - 400)*200) / 1024 + 0.24, (
             min(1 - (noise.pnoise1(_frame / 100) + frames_listening / 60), 1),
             min(1 - (noise.pnoise1(_frame / 100-200) + frames_listening / 60), 1),
             min(1 - (noise.pnoise1(_frame / 100-300) + frames_listening / 60), 1),
         ))
-        sphere((0, 0, -20), (a3*5 + noise.pnoise1(_frame / 200 - 1000)*80) / 1024 + 1.24, (
+        sphere((0, 0, -20), (a3 + noise.pnoise1(_frame / 200 - 1000)*80*4) / 1024 + 1.24, (
             123/255 + noise.pnoise1(_frame / 100) / 4,
             213/255 + noise.pnoise1(_frame / 100 + 100) / 4,
             252/255 + noise.pnoise1(_frame / 100 + 200) / 4,
         ))
-        sphere((0, 0, -40), (a2*5 + noise.pnoise1(_frame / 200 - 2000)*100) / 1024 + 4.24, (
+        sphere((0, 0, -40), (a2*2 + noise.pnoise1(_frame / 200 - 2000)*100*4) / 1024 + 4.24, (
             7/255 + noise.pnoise1(_frame / 100 + 300) / 4,
             178/255 + noise.pnoise1(_frame / 100 + 400) / 4,
             252/255 + noise.pnoise1(_frame / 100 + 500) / 4,
         ))
-        sphere((0, 0, -80), (a1*5 + noise.pnoise1(_frame / 200 - 4000)*256) / 1024 + 10.24, (
+        sphere((0, 0, -80), (a1*5 + noise.pnoise1(_frame / 200 - 4000)*256*8) / 1024 + 10.24, (
             1/255 + noise.pnoise1(_frame / 100 + 600) / 4,
             130/255 + noise.pnoise1(_frame / 100 + 700) / 4,
             186/255 + noise.pnoise1(_frame / 100 + 800) / 4,

@@ -1255,19 +1255,11 @@
             "members": [
                 "Alisha Naikvde",
                 "Sanvi Kolekar",
-                "Karan Mhaske"
-            ],
-            "class": "IX"
-        },
-        {
-            "title": "",
-            "roomNumber": "307",
-            "floor": "3",
-            "members": [
+                "Karan Mhaske",
                 "Anaya Chidgoptra",
                 "Iqra Khan"
             ],
-            "class": ""
+            "class": "IX"
         },
         {
             "title": "Magnetic Car",
@@ -1326,20 +1318,12 @@
             "members": [
                 "Shreyash Hosdodde",
                 "Sujay Belkhede",
-                ""
-            ],
-            "class": "VII - G"
-        },
-        {
-            "title": "",
-            "roomNumber": "307",
-            "floor": "3",
-            "members": [
+                "",
                 "Ayaan Shammand",
                 "Soham Mahajan",
                 "Vedant Mahajan"
             ],
-            "class": ""
+            "class": "VII - G"
         },
         {
             "title": "Hydrolic Bridge",
@@ -1451,33 +1435,9 @@
             "roomNumber": "308",
             "floor": "3",
             "members": [
-                "Rocky Zakulla"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "308",
-            "floor": "3",
-            "members": [
-                "Brijesh Garg"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "308",
-            "floor": "3",
-            "members": [
-                "Jainesh Shah"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "308",
-            "floor": "3",
-            "members": [
+                "Rocky Zakulla",
+                "Brijesh Garg",
+                "Jainesh Shah",
                 "Hardik Pandita"
             ],
             "class": ""
@@ -1487,24 +1447,8 @@
             "roomNumber": "308",
             "floor": "3",
             "members": [
-                "Anushree Dixit"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "308",
-            "floor": "3",
-            "members": [
-                "Samruddhi Kulkarni"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "308",
-            "floor": "3",
-            "members": [
+                "Anushree Dixit",
+                "Samruddhi Kulkarni",
                 "Aradhya Kumar"
             ],
             "class": ""
@@ -1532,42 +1476,10 @@
             "roomNumber": "310",
             "floor": "3",
             "members": [
-                "Ayush Borade"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
-                "Shreya Podar"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
-                "Nrija Borade"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
-                "R Sarvesh Raghv"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
+                "Ayush Borade",
+                "Shreya Podar",
+                "Nrija Borade",
+                "R Sarvesh Raghv",
                 "Archit Gawande"
             ],
             "class": ""
@@ -1640,15 +1552,7 @@
             "roomNumber": "310",
             "floor": "3",
             "members": [
-                "Mehal Suvarna"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
+                "Mehal Suvarna",
                 "Saee Misal"
             ],
             "class": ""
@@ -1667,15 +1571,7 @@
             "roomNumber": "310",
             "floor": "3",
             "members": [
-                "Swaroop Gijare"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
+                "Swaroop Gijare",
                 "Aditya Kotkar"
             ],
             "class": ""
@@ -1685,15 +1581,7 @@
             "roomNumber": "310",
             "floor": "3",
             "members": [
-                "Kairav Kyan Pukan"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "310",
-            "floor": "3",
-            "members": [
+                "Kairav Kyan Pukan",
                 "Chinmay Kelkar"
             ],
             "class": ""
@@ -1739,24 +1627,8 @@
             "roomNumber": "311",
             "floor": "3",
             "members": [
-                "Praharshita Naik"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
-                "Aarna Aswar"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
+                "Praharshita Naik",
+                "Aarna Aswar",
                 "Ditya Choudhary"
             ],
             "class": ""
@@ -1766,15 +1638,7 @@
             "roomNumber": "311",
             "floor": "3",
             "members": [
-                "Yadvi Alva"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
+                "Yadvi Alva",
                 "Asmita Chavan"
             ],
             "class": ""
@@ -1784,42 +1648,10 @@
             "roomNumber": "311",
             "floor": "3",
             "members": [
-                "Harsh Ganjare"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
-                "Kaivalya Suryawanshi"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
-                "Satyam Thakur"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
-                "Sarthak Wadaskar"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
+                "Harsh Ganjare",
+                "Kaivalya Suryawanshi",
+                "Satyam Thakur",
+                "Sarthak Wadaskar",
                 "Amog Gondkar"
             ],
             "class": ""
@@ -1829,33 +1661,9 @@
             "roomNumber": "311",
             "floor": "3",
             "members": [
-                "Digvijay More"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
-                "Vishwajeet More"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
-                "Azim Khan"
-            ],
-            "class": ""
-        },
-        {
-            "title": "",
-            "roomNumber": "311",
-            "floor": "3",
-            "members": [
+                "Digvijay More",
+                "Vishwajeet More",
+                "Azim Khan",
                 "Anas Choudhary"
             ],
             "class": ""
@@ -1865,24 +1673,8 @@
             "roomNumber": "410",
             "floor": "4",
             "members": [
-                "Soham Kadu"
-            ],
-            "class": "IX Y"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
-                "Amogh Gondkar"
-            ],
-            "class": "IX Y"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
+                "Soham Kadu",
+                "Amogh Gondkar",
                 "Kalash Bhandari"
             ],
             "class": "IX Y"
@@ -1901,42 +1693,18 @@
             "roomNumber": "410",
             "floor": "4",
             "members": [
-                "Rifa Choudhary"
-            ],
-            "class": "IX -G"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
+                "Rifa Choudhary",
                 "Atharva Gandule"
             ],
-            "class": "VIII-Y"
+            "class": "IX -G"
         },
         {
             "title": "Human Respiratory System",
             "roomNumber": "410",
             "floor": "4",
             "members": [
-                "Shreyash Gager"
-            ],
-            "class": "VII - K"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
-                "Spandan Haldar"
-            ],
-            "class": "VII - K"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
+                "Shreyash Gager",
+                "Spandan Haldar",
                 "Avinash Suryawanshi"
             ],
             "class": "VII - K"
@@ -1946,69 +1714,21 @@
             "roomNumber": "410",
             "floor": "4",
             "members": [
-                "Atharva Chede"
-            ],
-            "class": "IX -Y"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
-                "Jay Gaikwad"
-            ],
-            "class": "IX-G"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
-                "Mohil More"
-            ],
-            "class": "IX-G"
-        },
-        {
-            "title": "",
-            "roomNumber": "410",
-            "floor": "4",
-            "members": [
+                "Atharva Chede",
+                "Jay Gaikwad",
+                "Mohil More",
                 "Saket Shinde"
             ],
-            "class": "IX-G"
+            "class": "IX -Y"
         },
         {
             "title": "Mars Rover",
             "roomNumber": "411",
             "floor": "4",
             "members": [
-                "K Vinayak Shanboghe"
-            ],
-            "class": "X"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
-                "Aditya Jena"
-            ],
-            "class": "X"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
-                "Ishan Gajbhiye"
-            ],
-            "class": "X"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
+                "K Vinayak Shanboghe",
+                "Aditya Jena",
+                "Ishan Gajbhiye",
                 "Eshaan Shetty"
             ],
             "class": "X"
@@ -2018,33 +1738,9 @@
             "roomNumber": "411",
             "floor": "4",
             "members": [
-                "Aditi Tripati"
-            ],
-            "class": "VIII-G"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
-                "Anantika Modak"
-            ],
-            "class": "VIII-G"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
-                "Shreya Singh"
-            ],
-            "class": "VIII-G"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
+                "Aditi Tripati",
+                "Anantika Modak",
+                "Shreya Singh",
                 "Sarayu Varier"
             ],
             "class": "VIII-G"
@@ -2054,24 +1750,8 @@
             "roomNumber": "411",
             "floor": "4",
             "members": [
-                "Tanish Jadav"
-            ],
-            "class": "IX -Y"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
-                "Kaustubh Gholap"
-            ],
-            "class": "IX -Y"
-        },
-        {
-            "title": "",
-            "roomNumber": "411",
-            "floor": "4",
-            "members": [
+                "Tanish Jadav",
+                "Kaustubh Gholap",
                 "Shourya Kharat"
             ],
             "class": "IX -Y"
