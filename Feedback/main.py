@@ -110,7 +110,7 @@ def process(frame):
                             face_data[name]["seen"].append(time.time())
                         else:
                             face_data[name]["seen"][-1] = time.time()
-        print(f"\r\r[F] Found faces: {seeing}", end="")
+        # print(f"\r\r[F] Found faces: {seeing}", end="")
 def start_processing():
     while True:
         try:
