@@ -39,13 +39,13 @@ while True:
                 elif greet == "Creator3":
                     speaker.speak_gtts("Arre Prathmesh bhai, kaisa hai?")
             if "Mentor" in greet:
-                speaker.speak_gtts("Good Morning project mentor. Welcome to Anveshan 2023. We are greatful for your presence, ma\'am.")
+                speaker.speak_gtts("Good Morning project mentor. Welcome to Anveshan 2023. We are greatful for your presence, mam.")
             if "Principal" in greet:
-                speaker.speak_gtts("Good Morning principal ma\'am. Welcome to Anveshan 2023. We are greatful for your presence, ma\'am.")
+                speaker.speak_gtts("Good Morning principal mam. Welcome to Anveshan 2023. We are greatful for your presence, mam.")
             if "AbhasSir" in greet:
                 speaker.speak_gtts("Good Morning Abhas sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
             if "PritiMaam" in greet:
-                speaker.speak_gtts("Good Morning Priti ma\'am. Welcome to Anveshan 2023. We are greatful for your presence, ma\'am.")
+                speaker.speak_gtts("Good Morning Priti mam. Welcome to Anveshan 2023. We are greatful for your presence, mam.")
             if "ShreyasSir" in greet:
                 speaker.speak_gtts("Good Morning Shreyas sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
             if "MthSir" in greet:

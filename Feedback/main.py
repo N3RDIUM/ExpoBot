@@ -100,29 +100,32 @@ def process(frame):
                         if time.time() - face_data[name]["seen"][-1] < 5:
                             update_specialgreet(name)
                             greeted.append(name)
+                # Mark left eye
+                face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="large")
+                for face_landmarks in face_landmarks_list:
+                    eye = face_landmarks["left_eye"]
+                    avg_x = sum([x[0] for x in eye]) / len(eye)
+                    avg_y = sum([x[1] for x in eye]) / len(eye)
+                    avg_x += left
+                    avg_y += top
+                    size = max([x[0] for x in eye]) - min([x[0] for x in eye])
+                    cv2.rectangle(frame, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size / 2)*downscale_factor), (int(avg_x + size / 2)*downscale_factor, int(avg_y + size / 2)*downscale_factor), (0, 255, 0), 1)
+                    cv2.putText(frame, name, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size)*downscale_factor), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                    cv2.circle(frame, (int(avg_x)*downscale_factor, int(avg_y)*downscale_factor), 1, (0, 255, 0), 3)
                 # Update last seen
                 if name in face_data:
                     if not face_data[name]["feedback"]:
                         # If it's been more than 2 minutes since the last time we saw this face, update
-                        if face_data[name]["seen"][-1] < time.time() - 60*10: # ten mins minimum
+                        if face_data[name]["seen"][-1] < time.time() - 24: # ten mins minimum
                             if face_data[name]["seen"][-1] == 0:
                                 face_data[name]["seen"] = []
                             face_data[name]["seen"].append(time.time())
                         else:
                             face_data[name]["seen"][-1] = time.time()
-        # print(f"\r\r[F] Found faces: {seeing}", end="")
-def start_processing():
-    while True:
-        try:
-            # Only process the last frame
-            process(frames.pop(-1))
-            del frames[:]
-        except:
-            time.sleep(0.1)
-            continue
+        print(f"[F] Found faces: {seeing}", end="\r")
         
-pthread = threading.Thread(target=start_processing)
-pthread.start()
+# pthread = threading.Thread(target=start_processing)
+# pthread.start()
 
 thread = threading.Thread(target=start_server)
 thread.start()
@@ -138,8 +141,9 @@ f = 0
 
 while True:
     ret, frame = cap.read()
-    if f % 60 == 0:
-        frames.append(frame)
+    # if f % 60 == 0:
+    #     frames.append(frame)
+    process(frame)
     # Show the frame
     cv2.imshow("Video", frame)
     if cv2.waitKey(1) & 0xFF == ord("q"):
