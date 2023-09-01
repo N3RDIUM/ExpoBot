@@ -47,7 +47,7 @@ def get_response(message):
         {"role": "user", "content": message},
     )
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo", messages=messages
+        model="gpt-3.5-turbo-16k", messages=messages
     )
     return str(response.choices[0].message.content)
 
@@ -56,11 +56,11 @@ class ChatBot:
         logging.log(logging.INFO, "[CHAT] ChatBot __init__")
         self.conversation_data = []
         self.fallbacks = []
-        self.cache = {}
-        self.nlp_cache = {}
-        if not os.path.exists("./cache.json"):
-            with open("./cache.json", "w") as f:
-                f.write("{}")
+        # self.cache = {}
+        # self.nlp_cache = {}
+        # if not os.path.exists("./cache.json"):
+        #     with open("./cache.json", "w") as f:
+        #         f.write("{}")
         self.loader = yaml.SafeLoader
         self.speaker = speaker
         self.nlp = spacy.load("en_core_web_lg")
@@ -109,22 +109,19 @@ class ChatBot:
         if query == "":
             return ""
         logging.log(logging.INFO, f"[CHAT] Answering query: {query}")
-        if not query in self.cache:
-            logging.log(logging.INFO, "[CHAT] Query not in cache. Calculating similarities...")
-            similarities = []
-            for conversation_entry in tqdm.tqdm(self.conversation_data, desc="Calculating similarities"):
-                similarities.append(self.calculate_similarity(query, conversation_entry))
-            logging.log(logging.INFO, "[CHAT] Similarities calculated. Linearizing...")
-            
-            linear_similarities = []
-            for i, similarity_scores in enumerate(similarities):
-                for j, score in enumerate(similarity_scores):
-                    if score > THRESHOLD:
-                        linear_similarities.append((score, (i, j)))
-            logging.log(logging.INFO, "[CHAT] Linearized. Sorting...")
-            self.cache[query] = linear_similarities
-        else:
-            linear_similarities = self.cache[query]
+        logging.log(logging.INFO, "[CHAT] Calculating similarities...")
+        similarities = []
+        for conversation_entry in tqdm.tqdm(self.conversation_data, desc="Calculating similarities"):
+            similarities.append(self.calculate_similarity(query, conversation_entry))
+        logging.log(logging.INFO, "[CHAT] Similarities calculated. Linearizing...")
+        
+        linear_similarities = []
+        for i, similarity_scores in enumerate(similarities):
+            for j, score in enumerate(similarity_scores):
+                if score > THRESHOLD:
+                    linear_similarities.append((score, (i, j)))
+        logging.log(logging.INFO, "[CHAT] Linearized. Sorting...")
+        self.cache[query] = linear_similarities
 
         self.save_cache()
 
@@ -255,13 +252,16 @@ class ChatBot:
                     "Which class made the {} project?",
                 ]
                 for question in whichclass_questions:
-                    data.append([
-                        question,
-                        "The project {} was made by {}.".format(
-                            project["title"],
-                            self.number_to_speech(project["class"].split(" ")[0]) + " " + project["class"].split(" ")[1]
-                        )
-                    ])
+                    try:
+                        data.append([
+                            question,
+                            "The project {} was made by {}.".format(
+                                project["title"],
+                                self.number_to_speech(project["class"].split(" ")[0]) + " " + project["class"].split(" ")[1]
+                            )
+                        ])
+                    except IndexError:
+                        pass
                     
             # Who is X?
             for member in project["members"]:

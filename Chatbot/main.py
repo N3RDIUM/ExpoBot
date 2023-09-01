@@ -1,6 +1,6 @@
 import logging
 import time
-import fuzzywuzzy
+import subprocess
 logging.basicConfig(level=logging.INFO)
 DEV = False
 # for older hardware, set this to True
@@ -50,9 +50,7 @@ if not DEV:
     s.initialize()
 
     logging.log(logging.INFO, "[MAIN] Speaker initialized! Running speaker test...")
-    s.speak_gtts("Hello. Welcome to Anveshan! I am JARVIS!")
-    s.speak_offline("Testing offline speech synthesis.")
-    s.speak_elevenlabs("Testing eleven labs speech synthesis.")
+    s.speak_gtts("Hello. Welcome to Anveshan, the quest within! I am ExpoBot!")
     logging.log(logging.INFO, "[MAIN] Speaker test complete!")
 
     logging.log(logging.INFO, "[MAIN] Initializing speech recognition...")
@@ -304,6 +302,8 @@ def process(response):
     if "play" in response:
         play()
         return True
+    # if "countdown" in response.lower():
+    #     subprocess.Popen(["python3", "countdown.py"])
     return False
 
 def pause():
@@ -345,7 +345,9 @@ while True:
                     if comms:
                         comms.update({"speaking": "bot", "speaking-text": ans})
                     logging.log(logging.INFO, "[MAIN] Speaking using TTS...")
+                    pause()
                     s.speak_gtts(ans)
+                    play()
                     if comms:
                         comms.update({"speaking": "no-one", "speaking-text": ""})
                 except ValueError: # chatbot answered with nothing

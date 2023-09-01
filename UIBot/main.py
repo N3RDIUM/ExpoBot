@@ -121,7 +121,7 @@ while not glfw.window_should_close(window):
         if server.initialized and not server.connected:
             text((10, 10), "Waiting for client " + get_spinner())
         if server.connected:
-            _amplitude_samples.append(server.data["amplitude"])
+            _amplitude_samples.append(server.data["amplitude"] / 10)
             if len(amplitude_samples) > 16:
                 amplitude_samples.pop(0)
             if len(_amplitude_samples) > 8:

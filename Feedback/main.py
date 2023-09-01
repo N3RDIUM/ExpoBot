@@ -15,7 +15,7 @@ log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 # Live face recognition
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1600)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 900)
 cap.set(cv2.CAP_PROP_EXPOSURE, -8.0)
@@ -100,6 +100,7 @@ def process(frame):
                         if time.time() - face_data[name]["seen"][-1] < 5:
                             update_specialgreet(name)
                             greeted.append(name)
+                            
                 # Mark left eye
                 face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="large")
                 for face_landmarks in face_landmarks_list:
@@ -116,7 +117,7 @@ def process(frame):
                 if name in face_data:
                     if not face_data[name]["feedback"]:
                         # If it's been more than 2 minutes since the last time we saw this face, update
-                        if face_data[name]["seen"][-1] < time.time() - 24: # ten mins minimum
+                        if face_data[name]["seen"][-1] < time.time() - 12:
                             if face_data[name]["seen"][-1] == 0:
                                 face_data[name]["seen"] = []
                             face_data[name]["seen"].append(time.time())

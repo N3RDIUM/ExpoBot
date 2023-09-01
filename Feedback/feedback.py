@@ -31,15 +31,6 @@ while True:
                 askForFeedback(face)
         specialgreet = requests.get("http://localhost:5000/sgget").json()
         for greet in specialgreet["data"]:
-            if "Creator" in greet:
-                if greet == "Creator":
-                    speaker.speak_gtts("Arre bhai creator, kaisa hai?")
-                elif greet == "Creator2":
-                    speaker.speak_gtts("Arre Sahil bhai, kaisa hai?")
-                elif greet == "Creator3":
-                    speaker.speak_gtts("Arre Prathmesh bhai, kaisa hai?")
-            if "Mentor" in greet:
-                speaker.speak_gtts("Good Morning project mentor. Welcome to Anveshan 2023. We are greatful for your presence, mam.")
             if "Principal" in greet:
                 speaker.speak_gtts("Good Morning principal mam. Welcome to Anveshan 2023. We are greatful for your presence, mam.")
             if "AbhasSir" in greet:
