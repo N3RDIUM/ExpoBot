@@ -20,10 +20,10 @@ if not DEV:
     from servercomms import ServerComms
     import socket
 from chatbot import ChatBot
-from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
+# from selenium import webdriver
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.common.by import By
 
 # if not DEV:
 #     # Start a new browser session in Firefox
