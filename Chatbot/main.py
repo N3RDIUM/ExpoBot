@@ -2,7 +2,7 @@ import logging
 import time
 import subprocess
 logging.basicConfig(level=logging.INFO)
-DEV = True
+DEV = False
 # for older hardware, set this to True
 # TODO: Also cache fallbacks
 
