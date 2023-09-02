@@ -58,8 +58,8 @@ def get_response(message):
 try:
     get_response("What is AI?")
     logging.log(logging.INFO, "[CHAT] OpenAI API is working!")
-except:
-    logging.log(logging.INFO, "[CHAT] OpenAI API is NOT working!")
+except Exception as e:
+    logging.log(logging.INFO, "[CHAT] OpenAI API is NOT working! {}".format(e))
 
 class ChatBot:
     def __init__(self, speaker=None):
