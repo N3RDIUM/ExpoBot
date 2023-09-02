@@ -23,6 +23,7 @@ cap.set(cv2.CAP_PROP_EXPOSURE, -8.0)
 # Face data: Last seen
 face_data = {}
 special_greet = []
+normal_greet = []
 greeted = []
 def update_facedata(data):
     global face_data
@@ -30,6 +31,9 @@ def update_facedata(data):
 def update_specialgreet(data):
     global special_greet
     special_greet.append(data)
+def update_normalgreet(data):
+    global normal_greet
+    normal_greet.append(data)
 
 # Load known faces
 import os
@@ -63,6 +67,12 @@ def start_server():
         special_greet.clear()
         greeted.extend(greets)
         return flask.jsonify({"data": greets})
+    @app.route("/ngget/")
+    def normal_greet_get():
+        greets = normal_greet.copy()
+        normal_greet.clear()
+        greeted.extend(greets)
+        return flask.jsonify({"data": greets})
     app.run(port=5000)
     
 frames = []
@@ -87,6 +97,7 @@ def process(frame):
                 try:
                     faces[fname] = fr.face_encodings(fr.load_image_file(f"faces/{fname}.jpg"), model="large")[0]
                     print("Loaded face: " + fname)
+                    
                     update_facedata({fname: {"seen":[time.time()], "feedback": False}})
                 except:
                     print("Error loading face: " + fname)
@@ -100,7 +111,12 @@ def process(frame):
                         if time.time() - face_data[name]["seen"][-1] < 5:
                             update_specialgreet(name)
                             greeted.append(name)
-                            
+                # Normal greetings
+                if name not in greeted:
+                    if time.time() - face_data[name]["seen"][-1] < 5:
+                        update_normalgreet(name)
+                        greeted.append(name)
+                
                 # Mark left eye
                 face_landmarks_list = fr.face_landmarks(downscaled_frame[top:bottom, left:right], model="large")
                 for face_landmarks in face_landmarks_list:
@@ -113,6 +129,7 @@ def process(frame):
                     cv2.rectangle(frame, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size / 2)*downscale_factor), (int(avg_x + size / 2)*downscale_factor, int(avg_y + size / 2)*downscale_factor), (0, 255, 0), 1)
                     cv2.putText(frame, name, (int(avg_x - size / 2)*downscale_factor, int(avg_y - size)*downscale_factor), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
                     cv2.circle(frame, (int(avg_x)*downscale_factor, int(avg_y)*downscale_factor), 1, (0, 255, 0), 3)
+                    
                 # Update last seen
                 if name in face_data:
                     if not face_data[name]["feedback"]:
@@ -123,7 +140,7 @@ def process(frame):
                             face_data[name]["seen"].append(time.time())
                         else:
                             face_data[name]["seen"][-1] = time.time()
-        print(f"[F] Found faces: {seeing}; data: {face_data}")
+        # print(f"[F] Found faces: {seeing}; data: {face_data}")
         
 # pthread = threading.Thread(target=start_processing)
 # pthread.start()

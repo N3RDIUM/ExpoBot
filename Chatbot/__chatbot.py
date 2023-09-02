@@ -20,16 +20,15 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../"))
 import openai
 import json
-if not "USELOCAL" in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json"))):
-    logging.log(logging.INFO, "[CHAT] Using OpenAI API")
-    OPENAI_API_KEY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json")))["OPENAI_API_KEY"]
-    openai.api_key = OPENAI_API_KEY
-    engine = "ada"
-else:
-    logging.log(logging.INFO, "[CHAT] FAILED to use OpenAI API, Using local OpenAI API")
-    openai.api_key = None
-    openai.api_base = "http://localhost:5000/v1"
-    engine = ""
+# if not "USELOCAL" in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../config.json"))):
+#     logging.log(logging.INFO, "[CHAT] Using OpenAI API")
+import os
+import openai
+openai.api_base = "http://localhost:8080/v1"
+openai.api_key = "sx-xxx"
+OPENAI_API_KEY = "sx-xxx"
+os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
+logging.log(logging.INFO, "[CHAT] Using local OpenAI API")
 
 # Don't ask me why I wrote these prompts, I don't know either. I just know that they work.
 # Maybe they're just there to make the chatbot seem more human, and respond better to questions.
@@ -37,24 +36,35 @@ messages = [
     {"role": "system", "content": "You are a intelligent assistant. Speak in English only. Give short responses, enough to be spoken in 5 to 8 senconds. you are a chatbot at a science fair. When someone asks you where a person is, respond according to the data given below in json (just tell the place their project is at)."},
     {"role": "system", "content": "The speech recognition systems used in this project are not perfect. Allow for some errors in the speech recognition. For example, Vrunda may be recognized as Brenda or Vrinda. You can use the json data given below to figure it out. If you are not sure, just say you don't know."},
     {"role": "system", "content": "If there are multiple projects with the same name, just say a random one, then tell them that there are multiple projects with the same name, and ask them to be more specific, then tell them where the project theyre talking about is located."},
-    {"role": "system", "content": "You are a chatbot at a science fair. When someone asks you where a person is, respond according to the data given below in json."},
-    {"role": "system", "content": "You must be able to answer questions about the science fair from the json data given below:"},
-    {"role": "system", "content": json.dumps(json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "expo_data.json"))), indent=4)}
+    # {"role": "system", "content": "You are a chatbot at a science fair. When someone asks you where a person is, respond according to the data given below in json."},
+    # {"role": "system", "content": "You must be able to answer questions about the science fair from the json data given below:"},
 ]
+# with open("Chatbot/expo_data.json", "r") as f:
+#     expo_data = json.load(f)
+# # Append all of them one by one
+# for floor in expo_data["projects"]:
+#     messages.append({"role": "system", "content": "The project {} is located on the {} floor, made by {}, of class {}.".format(
+#         floor["title"],
+#         floor["floor"],
+#         floor["roomNumber"],
+#         str(floor["members"]).replace("'", "").replace("[", "").replace("]", ""),
+#         floor["class"]
+#     )})
 def get_response(message):
-    # check for moderation issues with openai
-    message = message.lower()
-    mod = openai.Moderation.create(message, 'text-moderation-stable')
-    if mod["results"][0]["flagged"]:
-        return "I'm sorry, I cannot answer that."
     global messages
     messages.append(
         {"role": "user", "content": message},
     )
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k", messages=messages
+    completion = openai.ChatCompletion.create(
+        model="koala-7B.ggmlv3.q2_K.bin",
+        messages=messages,
+        max_tokens=16,
+        temperature=0.7,
     )
-    return str(response.choices[0].message.content)
+    ret = str(completion.choices[0].message.content)
+    if ":" in ret:
+        ret = ret.split(":")[1]
+    return ret
 try:
     get_response("What is AI?")
     logging.log(logging.INFO, "[CHAT] OpenAI API is working!")

@@ -1,6 +1,5 @@
 import logging
 import time
-import subprocess
 logging.basicConfig(level=logging.INFO)
 DEV = False
 # for older hardware, set this to True

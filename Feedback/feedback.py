@@ -16,13 +16,13 @@ recognizer = Recognizer()
 recognizer.initialize()
 
 def askForFeedback(name):
-    speaker.speak_gtts("Hello, Please give your valuable feedback")
-    recognizer.record_and_save("feedback_recordings/" + name + ".wav")
-    requests.get("http://localhost:5000/feedback-given/" + name)
-    speaker.speak_gtts("Thank you for your feedback!")
+    # speaker.speak_gtts("Hello, Please give your valuable feedback")
+    # recognizer.record_and_save("feedback_recordings/" + name + ".wav")
+    # requests.get("http://localhost:5000/feedback-given/" + name)
+    # speaker.speak_gtts("Thank you for your feedback!")
+    pass
 
 while True:
-    sleep(1/12)
     try:
         faces = requests.get("http://localhost:5000/faces").json()
         for face in faces:
@@ -41,5 +41,8 @@ while True:
                 speaker.speak_gtts("Good Morning Shreyas sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
             if "MthSir" in greet:
                 speaker.speak_gtts("Good Morning Mth sir. Welcome to Anveshan 2023. We are greatful for your presence, sir.")
+        normalgreet = requests.get("http://localhost:5000/ngget").json()
+        # for greet in normalgreet["data"]:
+        #     speaker.speak_gtts("Hello. Welcome to Anveshan 2023!")
     except KeyboardInterrupt:
         break
