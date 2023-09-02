@@ -55,6 +55,11 @@ def get_response(message):
         model="gpt-3.5-turbo-16k", messages=messages
     )
     return str(response.choices[0].message.content)
+try:
+    get_response("What is AI?")
+    logging.log(logging.INFO, "[CHAT] OpenAI API is working!")
+except:
+    logging.log(logging.INFO, "[CHAT] OpenAI API is NOT working!")
 
 class ChatBot:
     def __init__(self, speaker=None):

@@ -1,7 +1,7 @@
 <center>
 
 # ExpoAssistant
-
+<img src="logo.png" style="align-self: center;"><br>
 An AI assistant to help people get around in a science fair! It also takes feedback!
 
 </center>
